@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "158768897775",
+    "project_id": "filmspace-db",
+    "storage_bucket": "filmspace-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158768897775:android:db21e04fb1d7cecf87851a",
+        "android_client_info": {
+          "package_name": "sg.edu.np.mad.moviespaceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158768897775-d4k8bqjcaqpahr4pn6j307as90h2cvhk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKNtS80PQ7DUqsUwy8ukEAzsNzVTMWyNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158768897775-d4k8bqjcaqpahr4pn6j307as90h2cvhk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
