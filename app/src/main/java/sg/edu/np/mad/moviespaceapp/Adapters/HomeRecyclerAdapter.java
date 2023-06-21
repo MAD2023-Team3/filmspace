@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import sg.edu.np.mad.moviespaceapp.R;
 
 public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeViewHolder>{
     Context context;
-    List<SearchArrayObject> list;
+    List<HomeViewHolder> list;
     @NonNull
     @Override
     public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

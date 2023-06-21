@@ -16,9 +16,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // firestore database
+
 
 
         search_view = findViewById(R.id.search_view);
         recycler_view_home = findViewById(R.id.recycler_view_home);
+        // nav bar and nav drawer
+
+        //
+
     }
 }

@@ -8,33 +8,35 @@
     android:id="@+id/home_container"
     app:cardBackgroundColor="@color/black"
     android:layout_margin="8dp">
+
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <ImageView
             android:id="@+id/imageView_poster"
-            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp"
+            android:scaleType="centerCrop" />
+
         <TextView
             android:id="@+id/textView_movie"
-            android:text="Movie Name"
-            android:textColor="@color/white"
-            android:padding="8dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
+            android:padding="8dp"
             android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Movie Name"
+            android:textAlignment="center"
+            android:textColor="@color/white"
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
-        
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.cardview.widget.CardView>

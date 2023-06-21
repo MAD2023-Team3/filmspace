@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MovieSpace App</string>
+
+    <!-- activty_register strings -->
+    <string name="register_title">Register</string>
+    <string name="click_to_login">click to login</string>
+    <string name="email_hint">email: </string>
+    <string name="password_hint">password: </string>
+
+    <!-- activity_login strings -->
+    <string name="login_title">Login</string>
+    <string name="email_title">Email:</string>
+    <string name="password_title">Password:</string>
 </resources>
