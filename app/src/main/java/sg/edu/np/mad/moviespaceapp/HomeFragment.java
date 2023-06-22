@@ -3,7 +3,6 @@ package sg.edu.np.mad.moviespaceapp;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.constraintlayout.helper.widget.Carousel;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -132,7 +131,7 @@ public class HomeFragment extends Fragment {
 
     // recyclerview code block
     private void putDataIntoRecyclerView(List<MovieModelClass> movieList){
-        Adapter adapter = new Adapter(getContext(),movieList);
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);

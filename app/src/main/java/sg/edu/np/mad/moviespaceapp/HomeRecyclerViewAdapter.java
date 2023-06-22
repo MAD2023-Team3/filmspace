@@ -14,12 +14,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
+public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.MyViewHolder> {
 
     private Context mContext;
     private List<MovieModelClass> mData;
 
-    public Adapter(Context mContext, List<MovieModelClass> mdata) {
+    public HomeRecyclerViewAdapter(Context mContext, List<MovieModelClass> mdata) {
         this.mContext = mContext;
         this.mData = mdata;
     }
