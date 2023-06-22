@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // default fragment page
+        replaceFragment(new HomeFragment());
+        //
         // firestore database
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         btn_profile = findViewById(R.id.nav_profile);
         btn_home = findViewById(R.id.nav_Home);
 
+        // navbar and navdrawer buttons
         btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,25 +91,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 replaceFragment(new Profilefragment());
+                closeDrawer(drawerLayout);
             }
+
         });
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new HomeFragment());
+                closeDrawer(drawerLayout);
             }
+
         });
         //
 
-        // movie recycler view
-        search_view = findViewById(R.id.search_view);
-        recycler_view_home = findViewById(R.id.recycler_view_home);
-        //
+
     }
 
     @Override
     protected void onPause(){
         super.onPause();
         closeDrawer(drawerLayout);
+
     }
 }
