@@ -6,14 +6,14 @@
     <string name="click_to_login">click to login</string>
     <string name="email_hint">email: </string>
     <string name="password_hint">password: </string>
+    <string name="username_hint">username: </string>
 
     <!-- activity_login strings -->
     <string name="login_title">Login</string>
     <string name="email_title">Email:</string>
     <string name="password_title">Password:</string>
     <string name="click_to_register">click to register</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!-- navbar strings -->
     <string name="navbar_title">Filmspace</string>
 </resources>

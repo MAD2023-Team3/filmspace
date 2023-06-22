@@ -23,18 +23,18 @@
             android:padding="15dp">
             <!-- username placeholder -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/profile_username"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USERNAME"
-                android:textSize="45dp"
-                android:id="@+id/profile_username"/>
+                android:textSize="30dp" />
             <!-- email placeholder -->
             <TextView
+                android:id="@+id/profile_uid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="USERNAME@gmail.com"
-                android:id="@+id/email_profile"
-                android:textSize="15dp"/>
+                android:text="uid_placeholder"
+                android:textSize="15dp" />
         </LinearLayout>
 
         <!-- home button -->

@@ -23,12 +23,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Register extends AppCompatActivity {
     String TAG = "Register Activity";
-    TextInputEditText editTextEmail, editTextpassword;
+    TextInputEditText editTextEmail, editTextpassword,editTextusername;
     Button btn_register;
     TextView btn_click_to_login;
     FirebaseAuth mAuth;
@@ -42,6 +44,7 @@ public class Register extends AppCompatActivity {
 
         editTextEmail =findViewById(R.id.register_email);
         editTextpassword = findViewById(R.id.register_password);
+        editTextusername = findViewById(R.id.register_username);
         btn_register = findViewById(R.id.btn_register);
         mAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar_register);
@@ -63,10 +66,11 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 progressBar.setVisibility(View.VISIBLE);
-                String email,password;
+                String email,password,username;
                 email= String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextpassword.getText());
-
+                username = String.valueOf(editTextusername.getText());
+                List<String> watchlater_list=new ArrayList<String>();
                 // if the email textbox is empty
                 if(TextUtils.isEmpty(email)){
                     Toast.makeText(Register.this,"Enter email",Toast.LENGTH_SHORT).show();
@@ -92,6 +96,8 @@ public class Register extends AppCompatActivity {
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("email",email);
                                     user.put("password",password);
+                                    user.put("username",username);
+                                    user.put("watchlist_array",watchlater_list);
                                     firestore.collection("users").document(userID).set(user)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
