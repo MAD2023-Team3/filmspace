@@ -24,4 +24,10 @@
     <string name="movie_poster">Movie Poster</string>
     <string name="movie_overview">Hmm... We can\'t seem to get the information for this movie... Do submit a report and we will resolve this as soon as possible! </string>
     <string name="cast_header">Casts</string>
+
+    <!-- Home page strings -->
+    <string name="Popular_title">Popular</string>
+    <string name="Now_playing">Now Playing</string>
+    <string name="Top_Rated">Top Rated</string>
+    <string name="Upcoming">Upcoming</string>
 </resources>
