@@ -68,9 +68,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         getData.execute();
         // end: movie recycler view
 
-        Bundle bundle = new Bundle();
-        bundle.putString("key","value");
-
         return view;
     }
 
@@ -159,8 +156,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         Log.d("sd","ASDsdasd");
         Bundle bundle = new Bundle();
         bundle.putString("Movie_Id",movieList.get(position).getId());
-        bundle.putString("movie_name",movieList.get(position).getMovie_name());
-        bundle.putString("poster_path",movieList.get(position).getImg());
 
         Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
         movie_details_fragment.setArguments(bundle);

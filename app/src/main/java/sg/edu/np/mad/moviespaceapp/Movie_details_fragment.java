@@ -1,5 +1,6 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,9 +53,12 @@ public class Movie_details_fragment extends Fragment {
     List<String> watchlater_list=new ArrayList<String>();
     //
 
-
-    // moviemodelclass data
+    // JSON api url
+    String JSON_URL = "https://api.themoviedb.org/3/movie/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35";
+    //
+    // api details
     String movie_id,movie_name,poster_path;
+    MovieModelClass model;
 
     public Movie_details_fragment() {
         // Required empty public constructor
@@ -70,16 +83,10 @@ public class Movie_details_fragment extends Fragment {
         // unpack the bundle
         Bundle bundle = getArguments();
         movie_id = bundle.getString("Movie_Id");
-        movie_name = bundle.getString("movie_name");
-        poster_path = bundle.getString("poster_path");
 
-        // set the info to textview in the xml
-        ImageView movie_poster = view.findViewById(R.id.movie_poster);
-        TextView movie_title = view.findViewById(R.id.title_placeholder);
-        TextView overview_placeholder = view.findViewById(R.id.overview_placeholder);
-
-        Glide.with(this).load("https://image.tmdb.org/t/p/w500" + poster_path).into(movie_poster);
-        movie_title.setText(movie_name);
+        // api request
+        GetData getData = new GetData("https://api.themoviedb.org/3/movie/385687?api_key=d51877fbcef44b5e6c0254522b9c1a35");
+        getData.execute();
 
         // retrieving watchlater array from user info
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -145,5 +152,81 @@ public class Movie_details_fragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+    }
+
+    // start: code block for GetData
+    public class GetData extends AsyncTask<String,String,String> {
+        private String jsonUrl;
+
+        public GetData(String jsonUrl){
+            this.jsonUrl = jsonUrl;
+        }
+        @Override
+        protected String doInBackground(String... strings){
+            String current = "";
+
+            try{
+                URL url;
+                HttpURLConnection urlConnection = null;
+
+                try {
+                    Log.d("JSON",jsonUrl);
+                    url = new URL(jsonUrl);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+
+                    InputStream is = urlConnection.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+
+                    int data = isr.read();
+                    while(data != -1){
+                        current += (char) data;
+                        data = isr.read();
+                    }
+                    return current;
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }finally {
+                    if(urlConnection!= null){
+                        urlConnection.disconnect();;
+                    }
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return current;
+        }
+
+        // end: code block for GetData
+
+        // start: converting json into object
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                JSONObject jsonObject = new JSONObject(s);
+
+                // scans the jsonArray received from api request turns the request to
+                // MovieModelClass and inserts that in movieList
+
+                model = new MovieModelClass();
+                model.setId(jsonObject.getString("id"));
+                model.setMovie_name(jsonObject.getString("title"));
+                model.setImg(jsonObject.getString("poster_path"));
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            settotext(model);
+        }
+    }
+
+    public void settotext(MovieModelClass obj){
+        // set the info to textview in the xml
+        ImageView movie_poster = view.findViewById(R.id.movie_poster);
+        TextView movie_title = view.findViewById(R.id.title_placeholder);
+        TextView overview_placeholder = view.findViewById(R.id.overview_placeholder);
+
+        Glide.with(this).load("https://image.tmdb.org/t/p/w500" + obj.getImg()).into(movie_poster);
+        movie_title.setText(obj.getMovie_name());
     }
 }
