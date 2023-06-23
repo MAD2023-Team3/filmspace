@@ -1,6 +1,5 @@
 package sg.edu.np.mad.moviespaceapp;
 
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sg.edu.np.mad.moviespaceapp.Actoradaptors.ActorRecyclerViewAdapter;
+
 public class Movie_details_fragment extends Fragment {
 
     View view;
@@ -64,16 +64,8 @@ public class Movie_details_fragment extends Fragment {
     String movie_id,movie_name,poster_path,overview;
     MovieModelClass model;
     ActorModelClass actorModelClass;
-    List<ActorModelClass> actormodellist = new ArrayList<ActorModelClass>();
-
-    private void putActorIntoRecyclerView(List<ActorModelClass> actormedellist, RecyclerView actorView){
-        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),actormodellist,this);
-        actorView.setLayoutManager(new LinearLayoutManager(getContext()));
-        actorView.setAdapter(adapter);
-        LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-        actorView.setLayoutManager(myLayoutManager);
-    }
-
+    List<ActorModelClass> actormodellist;
+    RecyclerView actorrecyclerview;
 
     public Movie_details_fragment() {
         // Required empty public constructor
@@ -111,6 +103,9 @@ public class Movie_details_fragment extends Fragment {
         GetData getDataActorDetails = new GetData(creditLink,api_tag_creditLink);
         getDataActorDetails.execute();
 
+        // recycler view actor
+        actorrecyclerview = view.findViewById(R.id.cast_recyclerview);
+        actormodellist = new ArrayList<ActorModelClass>();
 
         // retrieving watchlater array from user info
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -268,6 +263,7 @@ public class Movie_details_fragment extends Fragment {
                     e.printStackTrace();
                 }
                 // code here
+                putDataIntoRecyclerView(actormodellist,actorrecyclerview);
             }
         }
     }
@@ -281,5 +277,13 @@ public class Movie_details_fragment extends Fragment {
         Glide.with(this).load("https://image.tmdb.org/t/p/w500" + obj.getImg()).into(movie_poster);
         movie_title.setText(obj.getMovie_name());
         overview.setText(obj.getOverview());
+    }
+
+    private void putDataIntoRecyclerView(List<ActorModelClass> actormodellist, RecyclerView recyclerView){
+        ActorRecyclerViewAdapter adapter = new ActorRecyclerViewAdapter(getContext(),actormodellist);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerView.setLayoutManager(myLayoutManager);
     }
 }

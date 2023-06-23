@@ -40,8 +40,6 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewHolder
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         MovieModelClass obj = mData.get(position);
-        holder.name.setText(obj.getMovie_name());
-
         // using glide library to display the image
 
         // https://image.tmdb.org/t/p/w500/[imagelink]

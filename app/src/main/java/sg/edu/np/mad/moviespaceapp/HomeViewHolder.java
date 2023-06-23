@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class HomeViewHolder extends RecyclerView.ViewHolder{
-    TextView name;
     ImageView img;
 
     HomeRecyclerViewInterface homeRecyclerViewInterface;
@@ -16,8 +15,7 @@ public class HomeViewHolder extends RecyclerView.ViewHolder{
     public HomeViewHolder(@NonNull View itemView,HomeRecyclerViewInterface homeRecyclerViewInterface) {
         super(itemView);
 
-        name=itemView.findViewById(R.id.name_txt);
-        img = itemView.findViewById(R.id.imageView);
+        img = itemView.findViewById(R.id.imageview);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

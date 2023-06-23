@@ -272,6 +272,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     // start: when clicking on a recyclerview item
     @Override
     public void onItemClick(int position) {
+        Log.d("name",all_movieslist.get(position).getMovie_name());
         Bundle bundle = new Bundle();
         bundle.putString("Movie_Id",all_movieslist.get(position).getId());
 
