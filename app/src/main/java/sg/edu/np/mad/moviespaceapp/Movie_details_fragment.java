@@ -1,5 +1,6 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,6 +61,8 @@ public class Movie_details_fragment extends Fragment {
     // api details
     String movie_id,movie_name,poster_path,overview;
     MovieModelClass model;
+    ActorModelClass actorModelClass;
+    List<ActorModelClass> actormodellist = new ArrayList<ActorModelClass>();
 
     public Movie_details_fragment() {
         // Required empty public constructor
@@ -86,11 +90,16 @@ public class Movie_details_fragment extends Fragment {
 
         // api request for movie details
         String movieLink = String.format("https://api.themoviedb.org/3/movie/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35", movie_id);
-        GetData getData = new GetData(movieLink);
-        getData.execute();
+        String api_tag_movieLink = "movie_api";
+        GetData getDatamovieDetails = new GetData(movieLink,api_tag_movieLink);
+        getDatamovieDetails.execute();
 
         // api request for movie credits
-        String creditLink = String.format("https://api.themoviedb.org/3/movie/%scredits?api_key=d51877fbcef44b5e6c0254522b9c1a35", movie_id);
+        String creditLink = String.format("https://api.themoviedb.org/3/movie/%s/credits?api_key=d51877fbcef44b5e6c0254522b9c1a35", movie_id);
+        String api_tag_creditLink = "credits_api";
+        GetData getDataActorDetails = new GetData(creditLink,api_tag_creditLink);
+        getDataActorDetails.execute();
+
 
         // retrieving watchlater array from user info
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -105,8 +114,6 @@ public class Movie_details_fragment extends Fragment {
                         watchlater_list.add((String) item);
                     }
                 }
-                // Use the field value as needed
-                Log.d("Movie details fragment", "Field value: " + watchlater_list);
 
                 // start: watch later code block
                 Button btn_watch_later = view.findViewById(R.id.btn_watch_later);
@@ -161,9 +168,11 @@ public class Movie_details_fragment extends Fragment {
     // start: code block for GetData
     public class GetData extends AsyncTask<String,String,String> {
         private String jsonUrl;
+        private String api_tag;
 
-        public GetData(String jsonUrl){
+        public GetData(String jsonUrl,String api_tag){
             this.jsonUrl = jsonUrl;
+            this.api_tag = api_tag;
         }
         @Override
         protected String doInBackground(String... strings){
@@ -207,21 +216,48 @@ public class Movie_details_fragment extends Fragment {
         // start: converting json into object
         @Override
         protected void onPostExecute(String s) {
-            try{
-                JSONObject jsonObject = new JSONObject(s);
+            if(api_tag.equals("movie_api")){
+                try{
+                    JSONObject jsonObject = new JSONObject(s);
 
-                // scans the jsonArray received from api request turns the request to
-                // MovieModelClass and inserts that in movieList
+                    // scans the jsonArray received from api request turns the request to
+                    // MovieModelClass and inserts that in movieList
 
-                model = new MovieModelClass();
-                model.setId(jsonObject.getString("id"));
-                model.setMovie_name(jsonObject.getString("title"));
-                model.setImg(jsonObject.getString("poster_path"));
-                model.setOverview(jsonObject.getString("overview"));
-            }catch (JSONException e){
-                e.printStackTrace();
+                    model = new MovieModelClass();
+                    model.setId(jsonObject.getString("id"));
+                    model.setMovie_name(jsonObject.getString("title"));
+                    model.setImg(jsonObject.getString("poster_path"));
+                    model.setOverview(jsonObject.getString("overview"));
+
+                    settotext(model);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            } else if (api_tag.equals("credits_api")) {
+                try{
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray jsonArray = jsonObject.getJSONArray("cast");
+
+                    // scans the jsonArray received from api request turns the request to
+                    // MovieModelClass and inserts that in movieList
+                    for(int i = 0; i<jsonArray.length();i++){
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        ActorModelClass actorModelClassobj = new ActorModelClass();
+
+                        actorModelClassobj.setId(jsonObject1.getString("id"));
+                        actorModelClassobj.setActor_name(jsonObject1.getString("name"));
+                        actorModelClassobj.setKnown_for_department(jsonObject1.getString("known_for_department"));
+                        actorModelClassobj.setActor_profile_path(jsonObject1.getString("profile_path"));
+                        actorModelClassobj.setPlaying_character(jsonObject1.getString("character"));
+
+                        Log.d("actorobj",actorModelClassobj.toString());
+                        actormodellist.add(actorModelClassobj);
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                // code here
             }
-            settotext(model);
         }
     }
 
