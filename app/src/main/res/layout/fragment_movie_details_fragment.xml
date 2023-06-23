@@ -62,4 +62,12 @@
         android:text="@string/cast_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/overview" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="79dp"
+        android:layout_height="139dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cast_header" />
 </androidx.constraintlayout.widget.ConstraintLayout>

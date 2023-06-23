@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +65,15 @@ public class Movie_details_fragment extends Fragment {
     MovieModelClass model;
     ActorModelClass actorModelClass;
     List<ActorModelClass> actormodellist = new ArrayList<ActorModelClass>();
+
+    private void putActorIntoRecyclerView(List<ActorModelClass> actormedellist, RecyclerView actorView){
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),actormodellist,this);
+        actorView.setLayoutManager(new LinearLayoutManager(getContext()));
+        actorView.setAdapter(adapter);
+        LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        actorView.setLayoutManager(myLayoutManager);
+    }
+
 
     public Movie_details_fragment() {
         // Required empty public constructor
