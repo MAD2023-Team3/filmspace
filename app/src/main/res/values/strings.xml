@@ -23,4 +23,5 @@
     <string name="movie_title">Movie Title</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="movie_overview">Hmm... We can\'t seem to get the information for this movie... Do submit a report and we will resolve this as soon as possible! </string>
+    <string name="cast_header">Casts</string>
 </resources>
