@@ -2,15 +2,17 @@ package sg.edu.np.mad.moviespaceapp;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,13 +21,18 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-public class HomeFragment extends Fragment {
+
+public class HomeFragment extends Fragment implements HomeRecyclerViewInterface {
 
     View view;
 
@@ -38,7 +45,6 @@ public class HomeFragment extends Fragment {
     private static String JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     //
 
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -46,6 +52,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -54,16 +61,21 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_homefragment, container, false);
 
-        // movie recycler view
+        // start: movie recycler view
         movieList= new ArrayList<>();
         recyclerView = view.findViewById(R.id.recyclerview);
         GetData getData = new GetData();
         getData.execute();
-        //
+        // end: movie recycler view
+
+
+        Bundle bundle = new Bundle();
+        bundle.putString("key","value");
+
         return view;
     }
 
-    // code block for GetData
+    // start: code block for GetData
     public class GetData extends AsyncTask<String,String,String> {
         @Override
         protected String doInBackground(String... strings){
@@ -103,6 +115,9 @@ public class HomeFragment extends Fragment {
             return current;
         }
 
+        // end: code block for GetData
+
+        // start: converting json into object
         @Override
         protected void onPostExecute(String s) {
             try{
@@ -128,13 +143,43 @@ public class HomeFragment extends Fragment {
             putDataIntoRecyclerView(movieList);
         }
     }
+    // end: converting json into object
 
-    // recyclerview code block
+    /// start: recyclerview code block
     private void putDataIntoRecyclerView(List<MovieModelClass> movieList){
-        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList);
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
     }
+
+    // start: when clicking on a recyclerview item
+    @Override
+    public void onItemClick(int position) {
+        Log.d("sd","ASDsdasd");
+        Bundle bundle = new Bundle();
+        bundle.putString("Movie_Id",movieList.get(position).getId());
+
+        Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
+        movie_details_fragment.setArguments(bundle);
+        // fragment transaction
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout,movie_details_fragment).commit();
+    }
+    // end: when clicking on a recyclerview item
+
+    /// end: recyclerview code block
+
+    // start: search MovieModelClass object by their id
+    public MovieModelClass SearchObjMovie(String Id){
+        for (int i = 0;i < movieList.size();i++){
+            if(movieList.get(i).getId().toString() == Id){
+                return movieList.get(i);
+            }else{
+                Log.d("meg","cant find ass");
+            }
+        }
+        return null;
+    }
+    // end: search object by their id
 }
