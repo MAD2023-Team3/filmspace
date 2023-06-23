@@ -57,7 +57,7 @@ public class Movie_details_fragment extends Fragment {
     String JSON_URL = "https://api.themoviedb.org/3/movie/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     //
     // api details
-    String movie_id,movie_name,poster_path;
+    String movie_id,movie_name,poster_path,overview;
     MovieModelClass model;
 
     public Movie_details_fragment() {
@@ -84,9 +84,13 @@ public class Movie_details_fragment extends Fragment {
         Bundle bundle = getArguments();
         movie_id = bundle.getString("Movie_Id");
 
-        // api request
-        GetData getData = new GetData("https://api.themoviedb.org/3/movie/385687?api_key=d51877fbcef44b5e6c0254522b9c1a35");
+        // api request for movie details
+        String movieLink = String.format("https://api.themoviedb.org/3/movie/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35", movie_id);
+        GetData getData = new GetData(movieLink);
         getData.execute();
+
+        // api request for movie credits
+        String creditLink = String.format("https://api.themoviedb.org/3/movie/%scredits?api_key=d51877fbcef44b5e6c0254522b9c1a35", movie_id);
 
         // retrieving watchlater array from user info
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -213,6 +217,7 @@ public class Movie_details_fragment extends Fragment {
                 model.setId(jsonObject.getString("id"));
                 model.setMovie_name(jsonObject.getString("title"));
                 model.setImg(jsonObject.getString("poster_path"));
+                model.setOverview(jsonObject.getString("overview"));
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -224,9 +229,10 @@ public class Movie_details_fragment extends Fragment {
         // set the info to textview in the xml
         ImageView movie_poster = view.findViewById(R.id.movie_poster);
         TextView movie_title = view.findViewById(R.id.title_placeholder);
-        TextView overview_placeholder = view.findViewById(R.id.overview_placeholder);
+        TextView overview = view.findViewById(R.id.overview);
 
         Glide.with(this).load("https://image.tmdb.org/t/p/w500" + obj.getImg()).into(movie_poster);
         movie_title.setText(obj.getMovie_name());
+        overview.setText(obj.getOverview());
     }
 }

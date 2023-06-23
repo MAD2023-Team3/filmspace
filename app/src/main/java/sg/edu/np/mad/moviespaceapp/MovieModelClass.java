@@ -4,11 +4,14 @@ public class MovieModelClass {
     String id;
     String movie_name;
     String img;
+    String overview;
+    
 
-    public MovieModelClass(String id, String movie_name, String img) {
+    public MovieModelClass(String id, String movie_name, String img, String overview) {
         this.id = id;
         this.movie_name = movie_name;
         this.img = img;
+        this.overview = overview;
     }
 
     public MovieModelClass() {
@@ -37,6 +40,14 @@ public class MovieModelClass {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     @Override
