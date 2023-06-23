@@ -68,7 +68,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         getData.execute();
         // end: movie recycler view
 
-
         Bundle bundle = new Bundle();
         bundle.putString("key","value");
 
@@ -145,7 +144,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     }
     // end: converting json into object
 
-    /// start: recyclerview code block
+    // start: recyclerview code block
     private void putDataIntoRecyclerView(List<MovieModelClass> movieList){
         HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
