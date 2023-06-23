@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.MyViewHolder> {
+public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewHolder> {
 
     private final HomeRecyclerViewInterface homeRecyclerViewInterface;
     private Context mContext;
@@ -28,52 +28,28 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         view = inflater.inflate(R.layout.home_movies_list,parent,false);
 
-        return new MyViewHolder(view,homeRecyclerViewInterface);
+        HomeViewHolder holder = new HomeViewHolder(view,homeRecyclerViewInterface);
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.name.setText(mData.get(position).getMovie_name());
+    public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
+        MovieModelClass obj = mData.get(position);
+        holder.name.setText(obj.getMovie_name());
 
         // using glide library to display the image
 
         // https://image.tmdb.org/t/p/w500/[imagelink]
-        Glide.with(mContext).load("https://image.tmdb.org/t/p/w500" + mData.get(position).getImg()).into(holder.img);
+        Glide.with(mContext).load("https://image.tmdb.org/t/p/w500" + obj.getImg()).into(holder.img);
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
-    }
-
-
-    // viewholder
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView name;
-        ImageView img;
-
-        public MyViewHolder(@NonNull View itemView,HomeRecyclerViewInterface homeRecyclerViewInterface) {
-            super(itemView);
-
-            name=itemView.findViewById(R.id.name_txt);
-            img = itemView.findViewById(R.id.imageView);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(homeRecyclerViewInterface != null){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            homeRecyclerViewInterface.onItemClick(position);
-                        }
-                    }
-                }
-            });
-        }
     }
 }
