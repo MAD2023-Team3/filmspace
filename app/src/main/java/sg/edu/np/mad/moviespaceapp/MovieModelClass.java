@@ -38,4 +38,13 @@ public class MovieModelClass {
     public void setImg(String img) {
         this.img = img;
     }
+
+    @Override
+    public String toString() {
+        return "MovieModelClass{" +
+                "id='" + id + '\'' +
+                ", movie_name='" + movie_name + '\'' +
+                ", img='" + img + '\'' +
+                '}';
+    }
 }

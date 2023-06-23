@@ -16,12 +16,14 @@ import java.util.List;
 
 public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.MyViewHolder> {
 
+    private final HomeRecyclerViewInterface homeRecyclerViewInterface;
     private Context mContext;
     private List<MovieModelClass> mData;
 
-    public HomeRecyclerViewAdapter(Context mContext, List<MovieModelClass> mdata) {
+    public HomeRecyclerViewAdapter(Context mContext, List<MovieModelClass> mdata,HomeRecyclerViewInterface homeRecyclerViewInterface) {
         this.mContext = mContext;
         this.mData = mdata;
+        this.homeRecyclerViewInterface = homeRecyclerViewInterface;
     }
 
     @NonNull
@@ -31,7 +33,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
         LayoutInflater inflater = LayoutInflater.from(mContext);
         view = inflater.inflate(R.layout.home_movies_list,parent,false);
 
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,homeRecyclerViewInterface);
     }
 
     @Override
@@ -55,11 +57,23 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
         TextView name;
         ImageView img;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,HomeRecyclerViewInterface homeRecyclerViewInterface) {
             super(itemView);
 
             name=itemView.findViewById(R.id.name_txt);
             img = itemView.findViewById(R.id.imageView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(homeRecyclerViewInterface != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            homeRecyclerViewInterface.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

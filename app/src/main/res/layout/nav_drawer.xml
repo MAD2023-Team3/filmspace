@@ -70,7 +70,7 @@
                 android:drawablePadding="8dp"/>
         </LinearLayout>
 
-        <!--watch later button-->
+        <!--Popular button-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,6 +86,100 @@
                 android:drawableLeft="@drawable/btn_watch_later"
                 android:drawablePadding="8dp"/>
         </LinearLayout>
+
+        <!--Movies section-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movies"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <!--black line-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/black"/>
+
+        <!--Popular button-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/nav_popular">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Popular"
+                android:textSize="20dp"
+                android:drawableLeft="@drawable/btn_popular"
+                android:drawablePadding="8dp"/>
+        </LinearLayout>
+
+        <!--Now Playing later button-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/nav_now_playing">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Now Playing"
+                android:textSize="20dp"
+                android:drawableLeft="@drawable/btn_now_playing"
+                android:drawablePadding="8dp"/>
+        </LinearLayout>
+
+        <!--watch later button-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/nav_top_rated">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Top Rated"
+                android:textSize="20dp"
+                android:drawableLeft="@drawable/btn_top_rated"
+                android:drawablePadding="8dp"/>
+        </LinearLayout>
+
+        <!--watch later button-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/nav_upcoming">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upcoming"
+                android:textSize="20dp"
+                android:drawableLeft="@drawable/btn_upcoming"
+                android:drawablePadding="8dp"/>
+        </LinearLayout>
+
+
+
+
+
 
         <!--black line-->
         <View

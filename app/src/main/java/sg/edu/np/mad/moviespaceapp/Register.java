@@ -60,9 +60,9 @@ public class Register extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         // register button
         btn_register.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View view){
                 progressBar.setVisibility(View.VISIBLE);
@@ -71,60 +71,66 @@ public class Register extends AppCompatActivity {
                 password = String.valueOf(editTextpassword.getText());
                 username = String.valueOf(editTextusername.getText());
                 List<String> watchlater_list=new ArrayList<String>();
-                // if the email textbox is empty
-                if(TextUtils.isEmpty(email)){
+
+                if(TextUtils.isEmpty(username)){
+                    // if the name textbox is empty
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(Register.this,"Enter name",Toast.LENGTH_SHORT).show();
+
+                } else if (TextUtils.isEmpty(email)) {
+                    // if the email textbox is empty
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(Register.this,"Enter email",Toast.LENGTH_SHORT).show();
-                }
 
-                // if the password textbox is empty
-                if(TextUtils.isEmpty(password)){
+                } else if (TextUtils.isEmpty(password)) {
+                    // if the password textbox is empty
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(Register.this,"Enter password",Toast.LENGTH_SHORT).show();
-                }
+                }else{
+                    // creates the user profile in the firestore database
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(TAG, "createUserWithEmail:success");
 
-                // creates the user profile in the firestore database
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
+                                        // add user data into realtime firebase database
+                                        userID = mAuth.getCurrentUser().getUid();
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("email",email);
+                                        user.put("password",password);
+                                        user.put("username",username);
+                                        user.put("watchlist_array",watchlater_list);
+                                        firestore.collection("users").document(userID).set(user)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Log.d(TAG,"success firestore");
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.d(TAG,"unsucess firestore");
+                                                    }
+                                                });
 
-                                    // add user data into realtime firebase database
-                                    userID = mAuth.getCurrentUser().getUid();
-                                    Map<String, Object> user = new HashMap<>();
-                                    user.put("email",email);
-                                    user.put("password",password);
-                                    user.put("username",username);
-                                    user.put("watchlist_array",watchlater_list);
-                                    firestore.collection("users").document(userID).set(user)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Log.d(TAG,"success firestore");
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.d(TAG,"unsucess firestore");
-                                                }
-                                            });
+                                        //
 
-                                    //
+                                        Toast.makeText(Register.this, "Authentication success.", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(),Login.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "createUserWithEmail:failure");
+                                        Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
 
-                                    Toast.makeText(Register.this, "Authentication success.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),Login.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "createUserWithEmail:failure");
-                                    Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
             }
         });
     }
@@ -132,12 +138,13 @@ public class Register extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // start: Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
             finish();
         }
+        // end: Check if user is signed in (non-null) and update UI accordingly.
     }
 }
