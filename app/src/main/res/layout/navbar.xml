@@ -42,9 +42,12 @@
 
             <TextView
                 android:id="@+id/nav_fame"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
+                android:textSize="15dp"
+                android:textStyle="bold"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginStart="120dp"
                 android:text="Fame:" />
         </LinearLayout>
     </LinearLayout>
