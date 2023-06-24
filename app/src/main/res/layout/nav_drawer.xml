@@ -74,6 +74,24 @@
                 android:drawablePadding="8dp"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/nav_leaderboard">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:drawablePadding="8dp"
+                android:text="Leaderboard"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+        </LinearLayout>
+
         <!--Popular button-->
         <LinearLayout
             android:layout_width="wrap_content"

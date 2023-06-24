@@ -16,11 +16,12 @@
         app:layout_constraintTop_toTopOf="parent"
         android:padding="15dp"
         android:id="@+id/navbar">
+
         <ImageView
+            android:id="@+id/btn_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/nav_btn_menu"
-            android:id="@+id/btn_menu"/>
+            android:src="@drawable/nav_btn_menu" />
 
         <TextView
             android:id="@+id/textView"
