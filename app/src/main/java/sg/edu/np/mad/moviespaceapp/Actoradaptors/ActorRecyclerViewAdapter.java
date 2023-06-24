@@ -13,9 +13,6 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import sg.edu.np.mad.moviespaceapp.ActorModelClass;
-import sg.edu.np.mad.moviespaceapp.HomeRecyclerViewInterface;
-import sg.edu.np.mad.moviespaceapp.HomeViewHolder;
-import sg.edu.np.mad.moviespaceapp.MovieModelClass;
 import sg.edu.np.mad.moviespaceapp.R;
 
 public class ActorRecyclerViewAdapter extends RecyclerView.Adapter<ActorHomeViewHolder> {
@@ -45,7 +42,11 @@ public class ActorRecyclerViewAdapter extends RecyclerView.Adapter<ActorHomeView
             // using glide library to display the image
 
             // https://image.tmdb.org/t/p/w500/[imagelink]
-            Glide.with(mContext).load("https://image.tmdb.org/t/p/w500" + obj.getActor_profile_path()).into(holder.img);
+            if(obj.getActor_profile_path() != null){
+                Glide.with(mContext).load("https://image.tmdb.org/t/p/w500" + obj.getActor_profile_path()).into(holder.img);
+            }else{
+
+            }
         }
 
     }
