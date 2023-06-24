@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ImageView btn_menu;
     LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard;
-    TextView profile_username,profile_uid;
+    TextView profile_username,profile_uid,nav_fame;
     //
 
     // methods involved in the nav_drawer
@@ -86,10 +86,15 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Retrieve field field
                 String username = documentSnapshot.getString("username");
+                Double fame = documentSnapshot.getDouble("fame");
+                Integer int_fame = fame.intValue();
+                // sets the username and fame count in the nav_drawer to user's username
+                nav_fame = findViewById(R.id.nav_fame);
+                profile_username =findViewById(R.id.profile_username);
 
-                // sets the username in the nav_drawer to user's username
                 profile_username.setText(username);
-
+                String display_fame = String.format("Fame:" + int_fame);
+                nav_fame.setText(display_fame);
                 // Use the field value as needed
                 Log.d("Firestore", "Field value: " + username);
             }
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         btn_watch_later = findViewById(R.id.nav_watchlater);
 
         profile_uid = findViewById(R.id.profile_uid);
-        profile_username =findViewById(R.id.profile_username);
+
 
         // sets the uid in the nav_drawer
         profile_uid.setText(String.format("uid:%s", userUid));

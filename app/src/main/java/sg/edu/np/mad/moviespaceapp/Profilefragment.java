@@ -28,7 +28,8 @@ public class Profilefragment extends Fragment {
     String username;
     FirebaseFirestore firestoredb;
     //
-   TextView profile_username,profile_email;
+   TextView profile_username,profile_email,profile_fame;
+
     public Profilefragment() {
         // Required empty public constructor
     }
@@ -46,7 +47,7 @@ public class Profilefragment extends Fragment {
         userUid = user.getUid();
         documentReference_user = firestoredb.collection("users").document(userUid);
 
-
+        profile_fame = view.findViewById(R.id.fame_count);
         profile_email = view.findViewById(R.id.emailfrag_email);
         profile_username = view.findViewById(R.id.profilefrag_username);
 
@@ -57,8 +58,11 @@ public class Profilefragment extends Fragment {
                 // Retrieve field field
                 String username = documentSnapshot.getString("username");
                 String email = documentSnapshot.getString("email");
-
-                // sets the username in the nav_drawer to user's username
+                Double fame = documentSnapshot.getDouble("fame");
+                Integer int_fame = fame.intValue();
+                // sets the values
+                profile_fame.setText(int_fame.toString());
+                profile_email.setText(email);
                 profile_username.setText(username);
 
                 // Use the field value as needed

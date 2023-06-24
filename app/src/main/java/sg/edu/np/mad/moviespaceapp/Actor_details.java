@@ -3,20 +3,27 @@ package sg.edu.np.mad.moviespaceapp;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,10 +35,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Actor_details extends Fragment {
-
+    // related to firestore db
+    FirebaseAuth auth;
+    FirebaseUser user;
+    DocumentReference documentReference_user;
+    String userUid;
+    String username;
+    FirebaseFirestore firestoredb;
     String actor_id;
     View view;
     public Actor_details() {
@@ -44,8 +60,14 @@ public class Actor_details extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_actor_details, container, false);
-        // firestore database
 
+        // firestore database
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        documentReference_user = firestoredb.collection("users").document(userUid);
+        //
         // unpack the bundle
         Bundle bundle = getArguments();
         actor_id= bundle.getString("Actor_Id");
@@ -53,6 +75,34 @@ public class Actor_details extends Fragment {
         //api request
         GetData getData = new GetData(String.format("https://api.themoviedb.org/3/person/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35",actor_id));
         getData.execute();
+
+        // send fame
+        // retrieving watchlater array from user info
+        documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                // Retrieve field field
+                Integer fame = (Integer) documentSnapshot.get("fame");
+
+                // start: watch later code block
+                Button btn_send_fame = view.findViewById(R.id.btn_send_fame);
+
+                btn_send_fame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // if watchlater_list does not contain movie_id of selected movie
+                        // add it to watchlater_list
+                    }
+                });
+                // end: watch later code block
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
         return view;
     }
 

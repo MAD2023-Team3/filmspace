@@ -71,6 +71,7 @@ public class Register extends AppCompatActivity {
                 password = String.valueOf(editTextpassword.getText());
                 username = String.valueOf(editTextusername.getText());
                 List<String> watchlater_list=new ArrayList<String>();
+                Integer fame = 100;
 
                 if(TextUtils.isEmpty(username)){
                     // if the name textbox is empty
@@ -103,6 +104,7 @@ public class Register extends AppCompatActivity {
                                         user.put("password",password);
                                         user.put("username",username);
                                         user.put("watchlist_array",watchlater_list);
+                                        user.put("fame",fame);
                                         firestore.collection("users").document(userID).set(user)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
