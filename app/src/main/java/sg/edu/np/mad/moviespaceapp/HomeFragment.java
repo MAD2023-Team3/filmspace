@@ -8,9 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,15 +18,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewAdapter;
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
 
 
 public class HomeFragment extends Fragment implements HomeRecyclerViewInterface {
@@ -53,6 +49,8 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
     private static String Top_Rated_JSON_URL ="https://api.themoviedb.org/3/movie/top_rated?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     String top_rated_api_tag = "top_rated_api_tag";
+
+
 
     //
 
@@ -92,16 +90,16 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         top_rated_recyclerview = view.findViewById(R.id.top_rated_recyclerView);
 
         // api request
-        GetData getData_popular = new GetData(popular_JSON_URL,popular_api_tag);
+        GetData getData_popular = new GetData(popular_JSON_URL,popular_api_tag,popular_recyclerView);
         getData_popular.execute();
 
-        GetData getData_now_playing = new GetData(Now_Playing_JSON_URL,now_playing_api_tag);
+        GetData getData_now_playing = new GetData(Now_Playing_JSON_URL,now_playing_api_tag,now_playing_recyclerview);
         getData_now_playing.execute();
 
-        GetData getData_top_rated = new GetData(Top_Rated_JSON_URL,top_rated_api_tag);
+        GetData getData_top_rated = new GetData(Top_Rated_JSON_URL,top_rated_api_tag,top_rated_recyclerview);
         getData_top_rated.execute();
 
-        GetData getData_upcoming = new GetData(Upcoming_JSON_URL,upcoming_api_tag);
+        GetData getData_upcoming = new GetData(Upcoming_JSON_URL,upcoming_api_tag,upcoming_recyclerview);
         getData_upcoming.execute();
 
 
@@ -115,8 +113,10 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         private String jsonUrl;
         private String api_tag;
 
-        public GetData(String jsonUrl,String api_tag){
+        private RecyclerView recyclerView;
 
+        public GetData(String jsonUrl,String api_tag,RecyclerView recyclerView){
+            this.recyclerView = recyclerView;
             this.jsonUrl = jsonUrl;
             this.api_tag = api_tag;
         }
@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                putDataIntoRecyclerView(popular_movieList,popular_recyclerView);
+                putDataIntoRecyclerView(popular_movieList,recyclerView,api_tag);
             } else if (api_tag.equals("upcoming_api_tag")) {
                 try {
                     JSONObject jsonObject = new JSONObject(s);
@@ -206,7 +206,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                putDataIntoRecyclerView(upcoming_movielist,upcoming_recyclerview);
+                putDataIntoRecyclerView(upcoming_movielist,recyclerView,api_tag);
 
             } else if (api_tag.equals("now_playing_api_tag")) {
                 try {
@@ -229,7 +229,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                putDataIntoRecyclerView(now_playing_api_movielist,now_playing_recyclerview);
+                putDataIntoRecyclerView(now_playing_api_movielist,recyclerView,api_tag);
 
             } else if (api_tag.equals("top_rated_api_tag")) {
                 try {
@@ -252,7 +252,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                putDataIntoRecyclerView(top_rated_movielist,top_rated_recyclerview);
+                putDataIntoRecyclerView(top_rated_movielist,recyclerView,api_tag);
 
             }
 
@@ -261,8 +261,8 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     // end: converting json into object
 
     // start: recyclerview code block
-    private void putDataIntoRecyclerView(List<MovieModelClass> movieList, RecyclerView recyclerView){
-        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this);
+    private void putDataIntoRecyclerView(List<MovieModelClass> movieList, RecyclerView recyclerView,String recyclerviewIdentifier){
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this,recyclerviewIdentifier);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
@@ -271,10 +271,17 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
     // start: when clicking on a recyclerview item
     @Override
-    public void onItemClick(int position) {
-        Log.d("name",all_movieslist.get(position).getMovie_name());
+    public void onItemClick(int position,String recyclerViewIdentifier) {
         Bundle bundle = new Bundle();
-        bundle.putString("Movie_Id",all_movieslist.get(position).getId());
+        if(recyclerViewIdentifier.equals("popular_api_tag")){
+            bundle.putString("Movie_Id",popular_movieList.get(position).getId());
+        } else if (recyclerViewIdentifier.equals("upcoming_api_tag")) {
+            bundle.putString("Movie_Id",upcoming_movielist.get(position).getId());
+        } else if (recyclerViewIdentifier.equals("now_playing_api_tag")) {
+            bundle.putString("Movie_Id",now_playing_api_movielist.get(position).getId());
+        } else if (recyclerViewIdentifier.equals("top_rated_api_tag")) {
+            bundle.putString("Movie_Id",top_rated_movielist.get(position).getId());
+        }
 
         Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
         movie_details_fragment.setArguments(bundle);

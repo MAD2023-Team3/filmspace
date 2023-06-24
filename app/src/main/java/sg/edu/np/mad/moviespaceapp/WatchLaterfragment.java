@@ -22,7 +22,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +33,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewAdapter;
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
 
 public class WatchLaterfragment extends Fragment implements HomeRecyclerViewInterface{
 
@@ -177,22 +179,28 @@ public class WatchLaterfragment extends Fragment implements HomeRecyclerViewInte
                 e.printStackTrace();
             }
 
-            putDataIntoRecyclerView(movieList);
+            putDataIntoRecyclerView(movieList,watch_later_recyclerview,"");
 
         }
     }
 
     // start: recyclerview code block
-    private void putDataIntoRecyclerView(List<MovieModelClass> movieList){
-        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this);
-        watch_later_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-        watch_later_recyclerview.setAdapter(adapter);
+    private void putDataIntoRecyclerView(List<MovieModelClass> movieList,RecyclerView recyclerView,String recyclerviewIdentifier){
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this,recyclerviewIdentifier);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-        watch_later_recyclerview.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
     }
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position,String recyclerViewIdentifier) {
+        Bundle bundle = new Bundle();
+        bundle.putString("Movie_Id",movieList.get(position).getId());
 
+        Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
+        movie_details_fragment.setArguments(bundle);
+        // fragment transaction
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout,movie_details_fragment).commit();
     }
     // end: when clicking on a recyclerview item
 

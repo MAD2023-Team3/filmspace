@@ -251,12 +251,11 @@ public class Movie_details_fragment extends Fragment {
                         ActorModelClass actorModelClassobj = new ActorModelClass();
 
                         actorModelClassobj.setId(jsonObject1.getString("id"));
-                        actorModelClassobj.setActor_name(jsonObject1.getString("name"));
-                        actorModelClassobj.setKnown_for_department(jsonObject1.getString("known_for_department"));
                         actorModelClassobj.setActor_profile_path(jsonObject1.getString("profile_path"));
+                        actorModelClassobj.setActor_name(jsonObject1.getString("name"));
                         actorModelClassobj.setPlaying_character(jsonObject1.getString("character"));
+                        actorModelClassobj.setKnown_for_department(jsonObject1.getString("known_for_department"));
 
-                        Log.d("actorobj",actorModelClassobj.toString());
                         actormodellist.add(actorModelClassobj);
                     }
                 }catch (JSONException e){

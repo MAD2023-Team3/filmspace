@@ -11,10 +11,12 @@ import sg.edu.np.mad.moviespaceapp.R;
 public class ActorHomeViewHolder extends RecyclerView.ViewHolder {
     TextView actor_name;
     ImageView img;
+    TextView character_name;
 
     public ActorHomeViewHolder(View itemView){
         super(itemView);
         actor_name= itemView.findViewById(R.id.actor_name_placeholder);
         img = itemView.findViewById(R.id.actor_img);
+        character_name = itemView.findViewById(R.id.actor_character_name_placeholder);
     }
 }

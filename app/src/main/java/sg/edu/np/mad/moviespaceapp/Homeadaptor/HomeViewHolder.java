@@ -1,21 +1,26 @@
-package sg.edu.np.mad.moviespaceapp;
+package sg.edu.np.mad.moviespaceapp.Homeadaptor;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
+import sg.edu.np.mad.moviespaceapp.R;
 
 public class HomeViewHolder extends RecyclerView.ViewHolder{
     ImageView img;
 
     HomeRecyclerViewInterface homeRecyclerViewInterface;
 
-    public HomeViewHolder(@NonNull View itemView,HomeRecyclerViewInterface homeRecyclerViewInterface) {
+    String recyclerViewIdentifier;
+
+    public HomeViewHolder(@NonNull View itemView,String recyclerViewIdentifier,HomeRecyclerViewInterface homeRecyclerViewInterface) {
         super(itemView);
 
         img = itemView.findViewById(R.id.imageview);
+        this.recyclerViewIdentifier=recyclerViewIdentifier;
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -23,7 +28,7 @@ public class HomeViewHolder extends RecyclerView.ViewHolder{
                 if(homeRecyclerViewInterface != null){
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION){
-                        homeRecyclerViewInterface.onItemClick(position);
+                        homeRecyclerViewInterface.onItemClick(position,recyclerViewIdentifier);
                     }
                 }
             }
