@@ -43,8 +43,9 @@ import java.util.List;
 import java.util.Map;
 
 import sg.edu.np.mad.moviespaceapp.Actoradaptors.ActorRecyclerViewAdapter;
+import sg.edu.np.mad.moviespaceapp.Actoradaptors.ActorRecyclerViewInterface;
 
-public class Movie_details_fragment extends Fragment {
+public class Movie_details_fragment extends Fragment implements ActorRecyclerViewInterface {
 
     View view;
     // related to firestore db
@@ -279,10 +280,21 @@ public class Movie_details_fragment extends Fragment {
     }
 
     private void putDataIntoRecyclerView(List<ActorModelClass> actormodellist, RecyclerView recyclerView){
-        ActorRecyclerViewAdapter adapter = new ActorRecyclerViewAdapter(getContext(),actormodellist);
+        ActorRecyclerViewAdapter adapter = new ActorRecyclerViewAdapter(getContext(),actormodellist,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(myLayoutManager);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Log.d("SSSSS","SSSSSSSSSSSSSSS");
+        Bundle bundle = new Bundle();
+        bundle.putString("Actor_Id",actormodellist.get(position).getId());
+        Actor_details actor_details_fragment = new Actor_details();
+        actor_details_fragment.setArguments(bundle);
+        // fragment transaction
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout,actor_details_fragment).commit();
     }
 }

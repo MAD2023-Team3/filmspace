@@ -16,12 +16,15 @@ import sg.edu.np.mad.moviespaceapp.ActorModelClass;
 import sg.edu.np.mad.moviespaceapp.R;
 
 public class ActorRecyclerViewAdapter extends RecyclerView.Adapter<ActorHomeViewHolder> {
+
+    private final ActorRecyclerViewInterface actorRecyclerViewInterface;
     private Context mContext;
     private List<ActorModelClass> mData;
 
-    public ActorRecyclerViewAdapter(Context mContext, List<ActorModelClass> mdata) {
+    public ActorRecyclerViewAdapter(Context mContext, List<ActorModelClass> mdata, ActorRecyclerViewInterface actorRecyclerViewInterface) {
         this.mContext = mContext;
         this.mData = mdata;
+        this.actorRecyclerViewInterface = actorRecyclerViewInterface;
     }
 
     @NonNull
@@ -31,7 +34,7 @@ public class ActorRecyclerViewAdapter extends RecyclerView.Adapter<ActorHomeView
         LayoutInflater inflater = LayoutInflater.from(mContext);
         view = inflater.inflate(R.layout.actor_card_item,parent,false);
 
-        ActorHomeViewHolder holder = new ActorHomeViewHolder(view);
+        ActorHomeViewHolder holder = new ActorHomeViewHolder(view,actorRecyclerViewInterface);
         return holder;
     }
     @Override

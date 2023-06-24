@@ -6,16 +6,27 @@ public class ActorModelClass {
     String actor_name;
     String actor_profile_path;
     String playing_character;
+
+    String Overview;
     public ActorModelClass() {
 
     }
 
-    public ActorModelClass(String id, String known_for_department, String actor_name, String actor_profile_path, String playing_character) {
-        this.Id = id;
-        this.Known_for_department = known_for_department;
+    public ActorModelClass(String id, String known_for_department, String actor_name, String actor_profile_path, String playing_character, String overview) {
+        Id = id;
+        Known_for_department = known_for_department;
         this.actor_name = actor_name;
         this.actor_profile_path = actor_profile_path;
         this.playing_character = playing_character;
+        Overview = overview;
+    }
+
+    public String getOverview() {
+        return Overview;
+    }
+
+    public void setOverview(String overview) {
+        Overview = overview;
     }
 
     public String getId() {
