@@ -184,7 +184,7 @@ public class WatchLaterfragment extends Fragment implements HomeRecyclerViewInte
         }
     }
 
-    // start: recyclerview code block
+    // start: recyclerview code block sd
     private void putDataIntoRecyclerView(List<MovieModelClass> movieList,RecyclerView recyclerView,String recyclerviewIdentifier){
         HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this,recyclerviewIdentifier);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
