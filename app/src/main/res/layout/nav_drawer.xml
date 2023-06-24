@@ -26,6 +26,7 @@
                 android:id="@+id/profile_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="USERNAME"
                 android:textSize="30dp" />
             <!-- email placeholder -->
@@ -33,6 +34,7 @@
                 android:id="@+id/profile_uid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="uid_placeholder"
                 android:textSize="15dp" />
         </LinearLayout>
@@ -48,6 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Home"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_home"
@@ -64,6 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Profile"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_profile"
@@ -81,6 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Watch Later"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_watch_later"
@@ -97,6 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Movies"
                 android:textSize="16dp" />
         </LinearLayout>
@@ -119,6 +125,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Popular"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_popular"
@@ -136,6 +143,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Now Playing"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_now_playing"
@@ -153,6 +161,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Top Rated"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_top_rated"
@@ -170,6 +179,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Upcoming"
                 android:textSize="20dp"
                 android:drawableLeft="@drawable/btn_upcoming"

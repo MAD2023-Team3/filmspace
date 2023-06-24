@@ -11,6 +11,7 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:orientation="horizontal"
+        android:background="#E1D9D1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:padding="15dp"
