@@ -10,6 +10,7 @@ public class LeaderboardModelClass {
 
     }
 
+    // constructor
     public LeaderboardModelClass(String actor_id,String profile_path, int fame,Integer actor_placement,String actor_name) {
         this.actor_id = actor_id;
         this.profile_path = profile_path;
