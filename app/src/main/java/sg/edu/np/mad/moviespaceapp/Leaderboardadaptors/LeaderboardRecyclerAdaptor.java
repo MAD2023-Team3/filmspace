@@ -39,14 +39,14 @@ public class LeaderboardRecyclerAdaptor extends RecyclerView.Adapter<Leaderboard
     public void onBindViewHolder(@NonNull LeaderboardViewHolder holder, int position) {
         LeaderboardModelClass obj = mData.get(position);
 
-        holder.textActor.setText(obj.getActor());
-        holder.textFame.setText(obj.getFame());
-
+        holder.actor_placement.setText(String.valueOf(obj.getActor_placement()));
+        holder.textActor.setText(obj.getActor_name());
+        holder.textFame.setText(String.valueOf(obj.getFame()));
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w500" + obj.getProfile_path()).into(holder.actor_profile_image);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mData.size();
     }
 }

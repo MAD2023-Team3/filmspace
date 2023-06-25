@@ -283,7 +283,6 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
 
     private void putDataIntoRecyclerView(List<ActorModelClass> actormodellist, RecyclerView recyclerView){
         ActorRecyclerViewAdapter adapter = new ActorRecyclerViewAdapter(getContext(),actormodellist,this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(myLayoutManager);

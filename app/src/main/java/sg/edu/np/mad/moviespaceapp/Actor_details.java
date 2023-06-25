@@ -51,7 +51,7 @@ public class Actor_details extends Fragment implements SendFameDialog.SendFameDi
     String userUid;
     String username;
     FirebaseFirestore firestoredb;
-    String actor_id,actor_profile_path;
+    String actor_id,actor_profile_path,actor_name;
     View view;
     TextView nav_fame,profile_fame;
 
@@ -165,10 +165,11 @@ public class Actor_details extends Fragment implements SendFameDialog.SendFameDi
                 // scans the jsonArray received from api request turns the request to
                 ActorModelClass actorModelClassobj = new ActorModelClass();
                 actor_profile_path = jsonObject.getString("profile_path");
+                actor_name = jsonObject.getString("name");
 
                 actorModelClassobj.setId(jsonObject.getString("id"));
                 actorModelClassobj.setActor_profile_path(actor_profile_path);
-                actorModelClassobj.setActor_name(jsonObject.getString("name"));
+                actorModelClassobj.setActor_name(actor_name);
                 actorModelClassobj.setOverview(jsonObject.getString("biography"));
 
                 settext(actorModelClassobj);
@@ -208,6 +209,7 @@ public class Actor_details extends Fragment implements SendFameDialog.SendFameDi
         //
 
         // send fame
+        // get user's fame count
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -219,13 +221,15 @@ public class Actor_details extends Fragment implements SendFameDialog.SendFameDi
 
                 // check if user has more fame than the fame they are trying to send
                 if(users_fame>data){
-                    // update db
+
+                    // user's new fame count
                     Integer new_users_fame = users_fame-data;
 
 
-                    // update user's fame count in db
                     Map<String,Object> updatedData = new HashMap<>();
                     updatedData.put("fame",new_users_fame);
+
+                    // update user's fame count in db
                     documentReference_user.set(updatedData, SetOptions.merge())
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -235,16 +239,14 @@ public class Actor_details extends Fragment implements SendFameDialog.SendFameDi
                                     // fame count in navbar
                                     nav_fame.setText("Fame:" + String.valueOf(new_users_fame));
 
-
-                                    // update actor's total fame
+                                    // document reference for actors collection
                                     DocumentReference docref_actor =firestoredb.collection("actors").document(actor_id);
-
-                                    //DocumentSnapshot actor_document = future.get();
 
                                     // first check if the actor's id is already present in db
                                     // if not then add new document
                                     Map<String,Object> actor = new HashMap<>();
                                     actor.put("actor_id",actor_id);
+                                    actor.put("name",actor_name);
                                     actor.put("fame",data);
                                     actor.put("actor_profile_path",actor_profile_path);
                                     firestoredb.collection("actors").document(actor_id).set(actor);
@@ -255,8 +257,17 @@ public class Actor_details extends Fragment implements SendFameDialog.SendFameDi
                                             if (task.isSuccessful()) {
                                                 DocumentSnapshot document = task.getResult();
                                                 if (document.exists()) {
-                                                    // Document(actor data) exists, you can access its data
-                                                    Map<String, Object> data = document.getData();
+                                                    // Document(actor data) exists
+                                                    // update the actor's fame count
+                                                    Integer fame = document.getLong("fame").intValue();
+                                                    Integer updated_fame = fame + data;
+                                                    actor.put("fame",updated_fame);
+                                                    docref_actor.set(actor,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+
+                                                        }
+                                                    });
                                                     // Perform actions with the document data
                                                 } else {
                                                     // Document(actor data) doesn't exist/ is not on db
