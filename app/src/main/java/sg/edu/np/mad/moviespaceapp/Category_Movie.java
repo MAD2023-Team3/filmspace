@@ -26,46 +26,47 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import sg.edu.np.mad.moviespaceapp.Model.PopularActorModelClass;
-import sg.edu.np.mad.moviespaceapp.PopularActorAdaptors.PopularActorRecyclerViewAdaptor;
-import sg.edu.np.mad.moviespaceapp.PopularActorAdaptors.PopularActorRecyclerViewInterface;
-
-public class Popular_Actors_fragment extends Fragment implements PopularActorRecyclerViewInterface {
-
-    List<PopularActorModelClass> popularActorModelClassList;
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewAdapter;
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
+import sg.edu.np.mad.moviespaceapp.Model.MovieModelClass;
 
 
-    private String JSON_URL = "https://api.themoviedb.org/3/person/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
-    RecyclerView popular_actor_recyclerview;
+public class Category_Movie extends Fragment implements HomeRecyclerViewInterface {
     View view;
-    public Popular_Actors_fragment() {
+
+    RecyclerView movie_category_recyclerview;
+    List<MovieModelClass> movie_category_list;
+    String JSON_URL;
+    public Category_Movie() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.popular_actor_fragment, container, false);
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_category_movie, container, false);
 
-        popular_actor_recyclerview = view.findViewById(R.id.popular_actor_recyclerview);
-        popularActorModelClassList = new ArrayList<>();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            JSON_URL = bundle.getString("api");
+            Log.d("api",JSON_URL);
+        }
+        movie_category_list = new ArrayList<>();
+        movie_category_recyclerview = view.findViewById(R.id.movie_category_recyclerview);
 
-        GetData getData = new GetData(JSON_URL,popular_actor_recyclerview);
+        GetData getData = new GetData(JSON_URL);
         getData.execute();
-
 
         return view;
     }
-
 
     // start: code block for GetData
     public class GetData extends AsyncTask<String,String,String> {
         private String jsonUrl;
 
-        private RecyclerView recyclerView;
-
-        public GetData(String jsonUrl,RecyclerView recyclerView){
-            this.recyclerView = recyclerView;
+        public GetData(String jsonUrl){
             this.jsonUrl = jsonUrl;
         }
         @Override
@@ -87,8 +88,10 @@ public class Popular_Actors_fragment extends Fragment implements PopularActorRec
                     while(data != -1){
                         current += (char) data;
                         data = isr.read();
+
                     }
                     return current;
+
                 } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
@@ -109,48 +112,45 @@ public class Popular_Actors_fragment extends Fragment implements PopularActorRec
         // start: converting json into object
         @Override
         protected void onPostExecute(String s) {
-            try{
+            try {
                 JSONObject jsonObject = new JSONObject(s);
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
 
                 // scans the jsonArray received from api request turns the request to
                 // MovieModelClass and inserts that in movieList
-                for(int i = 0; i<jsonArray.length();i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                    PopularActorModelClass obj = new PopularActorModelClass();
 
-                    if(jsonObject1.getString("known_for_department").equals("Acting")){
-                        obj.setActor_id(jsonObject1.getString("id"));
-                        obj.setActor_name(jsonObject1.getString("name"));
-                        obj.setProfile_path(jsonObject1.getString("profile_path"));
-                        obj.setKnown_for_department("Acting");
+                    MovieModelClass model = new MovieModelClass();
+                    model.setId(jsonObject1.getString("id"));
+                    model.setMovie_name(jsonObject1.getString("title"));
+                    model.setImg(jsonObject1.getString("poster_path"));
 
-                        popularActorModelClassList.add(obj);
-                    }
+                    movie_category_list.add(model);
                 }
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            // code here
-            putDataIntoRecyclerView(popularActorModelClassList);
+            putDataIntoRecyclerView(movie_category_list,movie_category_recyclerview,"");
         }
     }
+    // end: converting json into object
 
-    // recyclerview
-    private void putDataIntoRecyclerView(List<PopularActorModelClass> popularActorModelClassList){
-        PopularActorRecyclerViewAdaptor adapter = new PopularActorRecyclerViewAdaptor(getContext(),popularActorModelClassList,this);
-        popular_actor_recyclerview.setAdapter(adapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
-        popular_actor_recyclerview.setLayoutManager(gridLayoutManager);
+    private void putDataIntoRecyclerView(List<MovieModelClass> movieList, RecyclerView recyclerView,String recyclerviewIdentifier){
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this,recyclerviewIdentifier);
+        recyclerView.setAdapter(adapter);
+        GridLayoutManager myLayoutManager = new GridLayoutManager(getContext(),2);
+        recyclerView.setLayoutManager(myLayoutManager);
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position, String recyclerViewIdentifier) {
         Bundle bundle = new Bundle();
-        bundle.putString("Actor_Id",popularActorModelClassList.get(position).getActor_id());
-        Actor_details actor_details_fragment = new Actor_details();
-        actor_details_fragment.setArguments(bundle);
+        bundle.putString("Movie_Id",movie_category_list.get(position).getId());
+
+        Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
+        movie_details_fragment.setArguments(bundle);
         // fragment transaction
-        getFragmentManager().beginTransaction().replace(R.id.frameLayout,actor_details_fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout,movie_details_fragment).commit();
     }
 }

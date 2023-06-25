@@ -38,6 +38,13 @@ public class MainActivity extends AppCompatActivity{
     SearchView search_view;
     RecyclerView recycler_view_home;
 
+    private static String popular_JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
+
+    private static String Upcoming_JSON_URL ="https://api.themoviedb.org/3/movie/upcoming?api_key=d51877fbcef44b5e6c0254522b9c1a35";
+
+    private static String Now_Playing_JSON_URL ="https://api.themoviedb.org/3/movie/now_playing?api_key=d51877fbcef44b5e6c0254522b9c1a35";
+
+    private static String Top_Rated_JSON_URL ="https://api.themoviedb.org/3/movie/top_rated?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     // related to firestore db
     FirebaseAuth auth;
     FirebaseUser user;
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
     ImageView btn_menu;
     LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors;
+    LinearLayout btn_upcoming,btn_popular_movies,btn_now_playing,btn_top_rated;
     TextView profile_username,profile_uid,nav_fame;
     //
 
@@ -130,10 +138,14 @@ public class MainActivity extends AppCompatActivity{
         btn_watch_later = findViewById(R.id.nav_watchlater);
         btn_popular_actors = findViewById(R.id.btn_popular_actor);
 
-        profile_uid = findViewById(R.id.profile_uid);
-
+        // movies category buttons
+        btn_upcoming = findViewById(R.id.nav_upcoming);
+        btn_popular_movies = findViewById(R.id.nav_popular);
+        btn_top_rated = findViewById(R.id.nav_top_rated);
+        btn_now_playing = findViewById(R.id.nav_now_playing);
 
         // sets the uid in the nav_drawer
+        profile_uid = findViewById(R.id.profile_uid);
         profile_uid.setText(String.format("uid:%s", userUid));
 
         // navbar and navdrawer buttons
@@ -190,9 +202,53 @@ public class MainActivity extends AppCompatActivity{
                 finish();
             }
         });
-
         //
 
+
+        // Movies category buttons
+        btn_now_playing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Category_Movie category_movie = new Category_Movie();
+                Bundle bundle = new Bundle();
+                bundle.putString("api", Now_Playing_JSON_URL);
+                category_movie.setArguments(bundle);
+                replaceFragment(category_movie);
+            }
+        });
+
+        btn_top_rated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Category_Movie category_movie = new Category_Movie();
+                Bundle bundle = new Bundle();
+                bundle.putString("api", Top_Rated_JSON_URL);
+                category_movie.setArguments(bundle);
+                replaceFragment(category_movie);
+            }
+        });
+
+        btn_popular_movies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Category_Movie category_movie = new Category_Movie();
+                Bundle bundle = new Bundle();
+                bundle.putString("api", popular_JSON_URL);
+                category_movie.setArguments(bundle);
+                replaceFragment(category_movie);
+            }
+        });
+
+        btn_upcoming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Category_Movie category_movie = new Category_Movie();
+                Bundle bundle = new Bundle();
+                bundle.putString("api", Upcoming_JSON_URL);
+                category_movie.setArguments(bundle);
+                replaceFragment(category_movie);
+            }
+        });
 
     }
 
