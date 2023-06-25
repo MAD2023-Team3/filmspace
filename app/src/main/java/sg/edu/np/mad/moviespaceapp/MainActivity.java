@@ -18,14 +18,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+import sg.edu.np.mad.moviespaceapp.SendFameDialog.SendFameDialog;
+
+public class MainActivity extends AppCompatActivity{
     SearchView search_view;
     RecyclerView recycler_view_home;
 
@@ -70,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         // default fragment page
         replaceFragment(new HomeFragment());
         //
@@ -79,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         firestoredb = FirebaseFirestore.getInstance();
         userUid = user.getUid();
         documentReference_user = firestoredb.collection("users").document(userUid);
+        FirebaseUser currentUser = auth.getCurrentUser();
 
         // reading the documentReference_user db
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -165,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
+                auth.signOut();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
@@ -182,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         closeDrawer(drawerLayout);
 
-
-
     }
+
 }

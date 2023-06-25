@@ -13,12 +13,12 @@ public class ActorModelClass {
     }
 
     public ActorModelClass(String id, String known_for_department, String actor_name, String actor_profile_path, String playing_character, String overview) {
-        Id = id;
-        Known_for_department = known_for_department;
+        this.Id = id;
+        this.Known_for_department = known_for_department;
         this.actor_name = actor_name;
         this.actor_profile_path = actor_profile_path;
         this.playing_character = playing_character;
-        Overview = overview;
+        this.Overview = overview;
     }
 
     public String getOverview() {

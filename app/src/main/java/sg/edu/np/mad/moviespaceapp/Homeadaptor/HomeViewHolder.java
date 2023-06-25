@@ -13,7 +13,6 @@ public class HomeViewHolder extends RecyclerView.ViewHolder{
     ImageView img;
 
     HomeRecyclerViewInterface homeRecyclerViewInterface;
-
     String recyclerViewIdentifier;
 
     public HomeViewHolder(@NonNull View itemView,String recyclerViewIdentifier,HomeRecyclerViewInterface homeRecyclerViewInterface) {

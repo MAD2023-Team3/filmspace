@@ -1,5 +1,6 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -16,8 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,6 +31,8 @@ import com.google.firebase.firestore.SetOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.DOMConfiguration;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,8 +44,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sg.edu.np.mad.moviespaceapp.SendFameDialog.SendFameDialog;
 
-public class Actor_details extends Fragment {
+
+public class Actor_details extends Fragment implements SendFameDialog.SendFameDialogListener {
     // related to firestore db
     FirebaseAuth auth;
     FirebaseUser user;
@@ -48,8 +55,10 @@ public class Actor_details extends Fragment {
     String userUid;
     String username;
     FirebaseFirestore firestoredb;
-    String actor_id;
+    String actor_id,actor_profile_path;
     View view;
+    TextView nav_fame,profile_fame;
+
     public Actor_details() {
         // Required empty public constructor
     }
@@ -61,13 +70,9 @@ public class Actor_details extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_actor_details, container, false);
 
-        // firestore database
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        firestoredb = FirebaseFirestore.getInstance();
-        userUid = user.getUid();
-        documentReference_user = firestoredb.collection("users").document(userUid);
-        //
+        // set Textview
+        nav_fame = getActivity().findViewById(R.id.nav_fame);
+
         // unpack the bundle
         Bundle bundle = getArguments();
         actor_id= bundle.getString("Actor_Id");
@@ -76,9 +81,17 @@ public class Actor_details extends Fragment {
         GetData getData = new GetData(String.format("https://api.themoviedb.org/3/person/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35",actor_id));
         getData.execute();
 
+        // send fame button
+        Button btn_send_fame = view.findViewById(R.id.btn_send_fame);
+        btn_send_fame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendFameDialog();
+            }
+        });
+
         // send fame
-        // retrieving watchlater array from user info
-        documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        /*documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 // Retrieve field field
@@ -87,13 +100,6 @@ public class Actor_details extends Fragment {
                 // start: watch later code block
                 Button btn_send_fame = view.findViewById(R.id.btn_send_fame);
 
-                btn_send_fame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // if watchlater_list does not contain movie_id of selected movie
-                        // add it to watchlater_list
-                    }
-                });
                 // end: watch later code block
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -101,11 +107,10 @@ public class Actor_details extends Fragment {
             public void onFailure(@NonNull Exception e) {
 
             }
-        });
+        });*/
 
         return view;
     }
-
 
 
     // get data
@@ -162,11 +167,11 @@ public class Actor_details extends Fragment {
                 JSONObject jsonObject = new JSONObject(s);
 
                 // scans the jsonArray received from api request turns the request to
-                // MovieModelClass and inserts that in movieList
                 ActorModelClass actorModelClassobj = new ActorModelClass();
+                actor_profile_path = jsonObject.getString("profile_path");
 
                 actorModelClassobj.setId(jsonObject.getString("id"));
-                actorModelClassobj.setActor_profile_path(jsonObject.getString("profile_path"));
+                actorModelClassobj.setActor_profile_path(actor_profile_path);
                 actorModelClassobj.setActor_name(jsonObject.getString("name"));
                 actorModelClassobj.setOverview(jsonObject.getString("biography"));
 
@@ -188,4 +193,224 @@ public class Actor_details extends Fragment {
         actor_name.setText(obj.getActor_name());
         biography.setText(obj.getOverview());
     }
+
+    // send fame dialog
+    public void SendFameDialog() {
+        SendFameDialog sendFameDialog = new SendFameDialog();
+        sendFameDialog.setTargetFragment(this,0);
+        sendFameDialog.show(getFragmentManager(),"dialog");
+
+    }
+
+    public void getinputedfame(Integer data){
+        // firestore database
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        documentReference_user = firestoredb.collection("users").document(userUid);
+        //
+
+        // send fame
+        documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                // Retrieve field field
+
+                // get user's fame
+                Double fame = documentSnapshot.getDouble("fame");
+                Integer users_fame = fame.intValue();
+
+                // check if user has more fame than the fame they are trying to send
+                if(users_fame>data){
+                    // update db
+                    Integer new_users_fame = users_fame-data;
+
+
+                    // update user's fame count in db
+                    Map<String,Object> updatedData = new HashMap<>();
+                    updatedData.put("fame",new_users_fame);
+                    documentReference_user.set(updatedData, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // update texts related to fame
+
+                                    // fame count in navbar
+                                    nav_fame.setText("Fame:" + String.valueOf(new_users_fame));
+
+
+                                    // update actor's total fame
+                                    DocumentReference docref_actor =firestoredb.collection("actors").document(actor_id);
+
+                                    //DocumentSnapshot actor_document = future.get();
+
+                                    // first check if the actor's id is already present in db
+                                    // if not then add new document
+                                    Map<String,Object> actor = new HashMap<>();
+                                    actor.put("actor_id",actor_id);
+                                    actor.put("fame",data);
+                                    actor.put("actor_profile_path",actor_profile_path);
+                                    firestoredb.collection("actors").document(actor_id).set(actor);
+
+                                    docref_actor.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    // Document(actor data) exists, you can access its data
+                                                    Map<String, Object> data = document.getData();
+                                                    // Perform actions with the document data
+                                                } else {
+                                                    // Document(actor data) doesn't exist/ is not on db
+
+                                                    docref_actor.set(actor) // pushes actor hashmap to db
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    Log.d("UPDATES FIRESTORE ACTOR","success firestore");
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.d("FAILES FIRESTORE ACTOR","fails firestore");
+                                                                }
+                                                            });
+                                                }
+                                            } else {
+                                                // An error occurred while fetching the document
+                                                Log.d("TAG", "Error getting document: " + task.getException());
+                                            }
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+
+                    // update fame textview
+                }else {
+                    Toast.makeText(getContext(),"Insufficient Fame",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+    /*
+    // updates the user's fame
+    @Override
+    public void SendFameToDb(Integer sent_fame) {
+        // firestore database
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        documentReference_user = firestoredb.collection("users").document(userUid);
+        //
+
+        // send fame
+        documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                // Retrieve field field
+
+                // get user's fame
+                Double fame = documentSnapshot.getDouble("fame");
+                Integer users_fame = fame.intValue();
+
+                // check if user has more fame than the fame they are trying to send
+                if(users_fame>sent_fame){
+                    // update db
+                    Integer new_users_fame = users_fame-sent_fame;
+
+
+                    // update user's fame count in db
+                    Map<String,Object> updatedData = new HashMap<>();
+                    updatedData.put("fame",new_users_fame);
+                    documentReference_user.set(updatedData, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // update texts related to fame
+
+                                    // fame count in navbar
+                                    TextView nav_fame = view.findViewById(R.id.nav_fame);
+                                    nav_fame.setText(new_users_fame);
+
+                                    // fame count in profile fragment
+                                    TextView profile_fame = view.findViewById(R.id.fame_count);
+                                    profile_fame.setText(new_users_fame);
+
+                                    // update actor's total fame
+                                    DocumentReference docref_actor =firestoredb.collection("actors").document(actor_id);
+
+                                    //DocumentSnapshot actor_document = future.get();
+
+                                    // first check if the actor's id is already present in db
+                                    // if not then add new document
+                                    Map<String,Object> actor = new HashMap<>();
+                                    actor.put("actor_id",actor_id);
+                                    actor.put("fame",sent_fame);
+                                    actor.put("actor_profile_path",actor_profile_path);
+                                    firestoredb.collection("actors").document(actor_id).set(actor);
+
+                                    docref_actor.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    // Document(actor data) exists, you can access its data
+                                                    Map<String, Object> data = document.getData();
+                                                    // Perform actions with the document data
+                                                } else {
+                                                    // Document(actor data) doesn't exist/ is not on db
+
+                                                    docref_actor.set(actor) // pushes actor hashmap to db
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    Log.d("UPDATES FIRESTORE ACTOR","success firestore");
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.d("FAILES FIRESTORE ACTOR","fails firestore");
+                                                                }
+                                                            });
+                                                }
+                                            } else {
+                                                // An error occurred while fetching the document
+                                                Log.d("TAG", "Error getting document: " + task.getException());
+                                            }
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+
+                    // update fame textview
+                }else {
+                    Toast.makeText(getContext(),"Insufficient Fame",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }*/
 }
