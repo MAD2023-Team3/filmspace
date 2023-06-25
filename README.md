@@ -4,6 +4,12 @@ FilmSpace is your one-stop solution to finding the best and latest movies out th
 ## App Category
 Entertainment
 
+## Team Members
+Chai Ming Kai
+Kwok Jing Xuan (S10243296B)
+Warren Kenzie (S10242875D)
+Wesley Loh 
+
 ## Stage 1 Features
 
 ### Collaborated Features
