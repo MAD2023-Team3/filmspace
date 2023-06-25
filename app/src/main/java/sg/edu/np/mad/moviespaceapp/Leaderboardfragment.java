@@ -27,10 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.moviespaceapp.Leaderboardadaptors.LeaderboardRecyclerAdaptor;
+import sg.edu.np.mad.moviespaceapp.Leaderboardadaptors.LeaderboardRecyclerViewInterface;
 import sg.edu.np.mad.moviespaceapp.Model.LeaderboardModelClass;
 import sg.edu.np.mad.moviespaceapp.Model.PopularActorModelClass;
 
-public class Leaderboardfragment extends Fragment {
+public class Leaderboardfragment extends Fragment implements LeaderboardRecyclerViewInterface {
     View view;
     List<LeaderboardModelClass> LeaderboardList;
     RecyclerView leaderboardrecyclerView;
@@ -96,7 +97,7 @@ public class Leaderboardfragment extends Fragment {
                     leaderboardrecyclerView = view.findViewById(R.id.fame_recycler_view);
                     leaderboardrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                    LeaderboardRecyclerAdaptor adapter = new LeaderboardRecyclerAdaptor(getContext(),leaderboard_list);
+                    LeaderboardRecyclerAdaptor adapter = new LeaderboardRecyclerAdaptor(getContext(),leaderboard_list,this);
                     leaderboardrecyclerView.setAdapter(adapter);
                 }
             } else {
@@ -107,11 +108,13 @@ public class Leaderboardfragment extends Fragment {
         return view;
     }
 
-    /*private List<LeaderboardModelClass> getLeaderboardData() {
-        List<LeaderboardModelClass> items = new ArrayList<>();
-        *//*items.add(new LeaderboardModelClass("Actor 1", 1));
-        items.add(new LeaderboardModelClass("Actor 2", 2));
-        items.add(new LeaderboardModelClass("Actor 3", 3));*//*
-        return items;
-    }*/
+    @Override
+    public void onItemClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("Actor_Id",leaderboard_list.get(position).getActor_id());
+        Actor_details actor_details_fragment = new Actor_details();
+        actor_details_fragment.setArguments(bundle);
+        // fragment transaction
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout,actor_details_fragment).commit();
+    }
 }
