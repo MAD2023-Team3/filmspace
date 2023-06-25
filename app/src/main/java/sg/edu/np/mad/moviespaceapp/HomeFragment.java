@@ -2,7 +2,6 @@ package sg.edu.np.mad.moviespaceapp;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewAdapter;
 import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
+import sg.edu.np.mad.moviespaceapp.Model.MovieModelClass;
 
 
 public class HomeFragment extends Fragment implements HomeRecyclerViewInterface {

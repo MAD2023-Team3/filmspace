@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import sg.edu.np.mad.moviespaceapp.ActorModelClass;
+import sg.edu.np.mad.moviespaceapp.Model.ActorModelClass;
 import sg.edu.np.mad.moviespaceapp.R;
 
 public class ActorRecyclerViewAdapter extends RecyclerView.Adapter<ActorHomeViewHolder> {

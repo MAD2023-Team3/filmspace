@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import sg.edu.np.mad.moviespaceapp.MovieModelClass;
+import sg.edu.np.mad.moviespaceapp.Model.MovieModelClass;
 import sg.edu.np.mad.moviespaceapp.R;
 
 public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewHolder> {

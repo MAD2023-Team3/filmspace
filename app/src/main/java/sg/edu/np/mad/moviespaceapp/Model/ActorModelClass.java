@@ -1,4 +1,4 @@
-package sg.edu.np.mad.moviespaceapp;
+package sg.edu.np.mad.moviespaceapp.Model;
 
 public class ActorModelClass {
     String Id;

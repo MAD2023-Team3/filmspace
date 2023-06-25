@@ -44,6 +44,8 @@ import java.util.Map;
 
 import sg.edu.np.mad.moviespaceapp.Actoradaptors.ActorRecyclerViewAdapter;
 import sg.edu.np.mad.moviespaceapp.Actoradaptors.ActorRecyclerViewInterface;
+import sg.edu.np.mad.moviespaceapp.Model.ActorModelClass;
+import sg.edu.np.mad.moviespaceapp.Model.MovieModelClass;
 
 public class Movie_details_fragment extends Fragment implements ActorRecyclerViewInterface {
 
@@ -289,7 +291,6 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
 
     @Override
     public void onItemClick(int position) {
-        Log.d("SSSSS","SSSSSSSSSSSSSSS");
         Bundle bundle = new Bundle();
         bundle.putString("Actor_Id",actormodellist.get(position).getId());
         Actor_details actor_details_fragment = new Actor_details();

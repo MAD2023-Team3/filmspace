@@ -36,6 +36,7 @@ import java.util.List;
 
 import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewAdapter;
 import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
+import sg.edu.np.mad.moviespaceapp.Model.MovieModelClass;
 
 public class WatchLaterfragment extends Fragment implements HomeRecyclerViewInterface{
 

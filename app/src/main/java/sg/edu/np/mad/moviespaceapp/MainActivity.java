@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity{
     //navbar and nav drawer
     DrawerLayout drawerLayout;
     ImageView btn_menu;
-    LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard;
+    LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors;
     TextView profile_username,profile_uid,nav_fame;
     //
 
@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity{
         btn_home = findViewById(R.id.nav_Home);
         btn_logout = findViewById(R.id.nav_logout);
         btn_watch_later = findViewById(R.id.nav_watchlater);
+        btn_popular_actors = findViewById(R.id.btn_popular_actor);
 
         profile_uid = findViewById(R.id.profile_uid);
 
@@ -136,6 +137,13 @@ public class MainActivity extends AppCompatActivity{
         profile_uid.setText(String.format("uid:%s", userUid));
 
         // navbar and navdrawer buttons
+        btn_popular_actors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new Popular_Actors_fragment());
+                closeDrawer(drawerLayout);
+            }
+        });
         btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
