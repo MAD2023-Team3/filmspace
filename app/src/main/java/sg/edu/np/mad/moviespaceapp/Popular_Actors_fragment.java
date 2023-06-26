@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.grpc.internal.SharedResourceHolder;
 import sg.edu.np.mad.moviespaceapp.Model.PopularActorModelClass;
 import sg.edu.np.mad.moviespaceapp.PopularActorAdaptors.PopularActorRecyclerViewAdaptor;
 import sg.edu.np.mad.moviespaceapp.PopularActorAdaptors.PopularActorRecyclerViewInterface;
@@ -34,7 +35,7 @@ public class Popular_Actors_fragment extends Fragment implements PopularActorRec
 
     List<PopularActorModelClass> popularActorModelClassList;
 
-
+    Integer grid_column_count;
     private String JSON_URL = "https://api.themoviedb.org/3/person/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     RecyclerView popular_actor_recyclerview;
     View view;
@@ -47,6 +48,7 @@ public class Popular_Actors_fragment extends Fragment implements PopularActorRec
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.popular_actor_fragment, container, false);
 
+        grid_column_count = getResources().getInteger(R.integer.grid_column_layout);
         popular_actor_recyclerview = view.findViewById(R.id.popular_actor_recyclerview);
         popularActorModelClassList = new ArrayList<>();
 

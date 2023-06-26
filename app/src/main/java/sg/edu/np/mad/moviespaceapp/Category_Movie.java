@@ -37,6 +37,8 @@ public class Category_Movie extends Fragment implements HomeRecyclerViewInterfac
     RecyclerView movie_category_recyclerview;
     List<MovieModelClass> movie_category_list;
     String JSON_URL;
+
+    Integer grid_column_count;
     public Category_Movie() {
         // Required empty public constructor
     }
@@ -48,11 +50,14 @@ public class Category_Movie extends Fragment implements HomeRecyclerViewInterfac
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_category_movie, container, false);
 
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             JSON_URL = bundle.getString("api");
             Log.d("api",JSON_URL);
         }
+
+        grid_column_count = getResources().getInteger(R.integer.grid_column_layout);
         movie_category_list = new ArrayList<>();
         movie_category_recyclerview = view.findViewById(R.id.movie_category_recyclerview);
 
@@ -139,7 +144,7 @@ public class Category_Movie extends Fragment implements HomeRecyclerViewInterfac
     private void putDataIntoRecyclerView(List<MovieModelClass> movieList, RecyclerView recyclerView,String recyclerviewIdentifier){
         HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this,recyclerviewIdentifier);
         recyclerView.setAdapter(adapter);
-        GridLayoutManager myLayoutManager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager myLayoutManager = new GridLayoutManager(getContext(),grid_column_count);
         recyclerView.setLayoutManager(myLayoutManager);
     }
 
