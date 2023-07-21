@@ -58,6 +58,17 @@
                 android:id="@+id/register_password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirmpassword_hint"
+                android:inputType="textPassword"
+                android:id="@+id/register_confirm_password"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ProgressBar
             android:layout_width="wrap_content"
