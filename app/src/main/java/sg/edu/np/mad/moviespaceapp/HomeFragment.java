@@ -92,14 +92,14 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         GetData getData_popular = new GetData(popular_JSON_URL,popular_api_tag,popular_recyclerView);
         getData_popular.execute();
 
-        GetData getData_now_playing = new GetData(Now_Playing_JSON_URL,now_playing_api_tag,now_playing_recyclerview);
-        getData_now_playing.execute();
+        GetData getData_upcoming = new GetData(Upcoming_JSON_URL,upcoming_api_tag,upcoming_recyclerview);
+        getData_upcoming.execute();
 
         GetData getData_top_rated = new GetData(Top_Rated_JSON_URL,top_rated_api_tag,top_rated_recyclerview);
         getData_top_rated.execute();
 
-        GetData getData_upcoming = new GetData(Upcoming_JSON_URL,upcoming_api_tag,upcoming_recyclerview);
-        getData_upcoming.execute();
+        GetData getData_now_playing = new GetData(Now_Playing_JSON_URL,now_playing_api_tag,now_playing_recyclerview);
+        getData_now_playing.execute();
 
 
         // end: movie recycler view
