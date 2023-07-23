@@ -174,7 +174,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
                         MovieModelClass model = new MovieModelClass();
                         model.setId(jsonObject1.getString("id"));
-                        model.setMovie_name(jsonObject1.getString("title"));
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         popular_movieList.add(model);
@@ -195,7 +194,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
                         MovieModelClass model = new MovieModelClass();
                         model.setId(jsonObject1.getString("id"));
-                        model.setMovie_name(jsonObject1.getString("title"));
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         upcoming_movielist.add(model);
@@ -217,7 +215,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
                         MovieModelClass model = new MovieModelClass();
                         model.setId(jsonObject1.getString("id"));
-                        model.setMovie_name(jsonObject1.getString("title"));
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         now_playing_api_movielist.add(model);
@@ -239,7 +236,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
                         MovieModelClass model = new MovieModelClass();
                         model.setId(jsonObject1.getString("id"));
-                        model.setMovie_name(jsonObject1.getString("title"));
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         top_rated_movielist.add(model);
