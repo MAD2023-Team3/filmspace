@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     View view;
 
     // recycler view
-    List<MovieModelClass> all_movieslist,popular_movieList,upcoming_movielist,now_playing_api_movielist,top_rated_movielist;
+    List<MovieModelClass> popular_movieList,upcoming_movielist,now_playing_api_movielist,top_rated_movielist;
     RecyclerView popular_recyclerView,upcoming_recyclerview,now_playing_recyclerview,top_rated_recyclerview;
     //
 
@@ -75,7 +75,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         upcoming_movielist = new ArrayList<>();
         now_playing_api_movielist = new ArrayList<>();
         top_rated_movielist = new ArrayList<>();
-        all_movieslist = new ArrayList<>();
 
         // popular recycler view
         popular_recyclerView = view.findViewById(R.id.recyclerview);
@@ -179,7 +178,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         popular_movieList.add(model);
-                        all_movieslist.add(model);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -201,7 +199,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         upcoming_movielist.add(model);
-                        all_movieslist.add(model);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -224,7 +221,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         now_playing_api_movielist.add(model);
-                        all_movieslist.add(model);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -247,7 +243,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         model.setImg(jsonObject1.getString("poster_path"));
 
                         top_rated_movielist.add(model);
-                        all_movieslist.add(model);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
