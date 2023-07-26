@@ -21,6 +21,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -149,8 +152,17 @@ public class Register extends AppCompatActivity {
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure");
-                                        Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-
+                                        try {
+                                            throw task.getException();
+                                        }  catch (FirebaseAuthInvalidCredentialsException e) {
+                                            // Handle invalid email exception
+                                            Toast.makeText(Register.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                                        } catch (FirebaseAuthUserCollisionException e) {
+                                            // Handle collision with existing user (if there is already the same email in the firebase)
+                                            Toast.makeText(Register.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             });
