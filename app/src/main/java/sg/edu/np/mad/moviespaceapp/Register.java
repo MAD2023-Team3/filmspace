@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,6 +21,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,13 +34,19 @@ import java.util.Map;
 
 public class Register extends AppCompatActivity {
     String TAG = "Register Activity";
-    TextInputEditText editTextEmail, editTextpassword,editTextusername;
+    // TextInput
+    TextInputEditText editTextEmail, editTextpassword,editTextusername,editTextconfirmpassword;
     Button btn_register;
     TextView btn_click_to_login;
+    // Firebase
     FirebaseAuth mAuth;
     FirebaseFirestore firestore;
     String userID;
+    // progress Bar
     ProgressBar progressBar;
+
+    // used for register button
+    String email,password,username,confirm_password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +54,7 @@ public class Register extends AppCompatActivity {
 
         editTextEmail =findViewById(R.id.register_email);
         editTextpassword = findViewById(R.id.register_password);
+        editTextconfirmpassword = findViewById(R.id.register_confirm_password);
         editTextusername = findViewById(R.id.register_username);
         btn_register = findViewById(R.id.btn_register);
         mAuth = FirebaseAuth.getInstance();
@@ -53,11 +64,13 @@ public class Register extends AppCompatActivity {
 
 
         // directs you to the login activty
-        btn_click_to_login.setOnClickListener(new View.OnClickListener() {
+        btn_click_to_login.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 Intent intent = new Intent(getApplicationContext(),Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                return false;
             }
         });
         // register button
@@ -66,9 +79,9 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 progressBar.setVisibility(View.VISIBLE);
-                String email,password,username;
                 email= String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextpassword.getText());
+                confirm_password = String.valueOf(editTextconfirmpassword.getText());
                 username = String.valueOf(editTextusername.getText());
                 List<String> watchlater_list=new ArrayList<String>();
                 Integer fame = 100;
@@ -87,6 +100,15 @@ public class Register extends AppCompatActivity {
                     // if the password textbox is empty
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(Register.this,"Enter password",Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(confirm_password)){
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(Register.this,"Enter confirm password",Toast.LENGTH_SHORT).show();
+                }else if(!confirm_password.equals(password)){
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(Register.this,"Wrong Confirm Password",Toast.LENGTH_SHORT).show();
+                } else if(confirm_password.length()<=5){
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(Register.this,"password must contain at least 6 characters",Toast.LENGTH_SHORT).show();
                 }else{
                     // creates the user profile in the firestore database
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -96,6 +118,9 @@ public class Register extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "createUserWithEmail:success");
+
+                                        // update mAuth
+                                        mAuth = FirebaseAuth.getInstance();
 
                                         // add user data into realtime firebase database
                                         userID = mAuth.getCurrentUser().getUid();
@@ -127,8 +152,17 @@ public class Register extends AppCompatActivity {
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure");
-                                        Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-
+                                        try {
+                                            throw task.getException();
+                                        }  catch (FirebaseAuthInvalidCredentialsException e) {
+                                            // Handle invalid email exception
+                                            Toast.makeText(Register.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                                        } catch (FirebaseAuthUserCollisionException e) {
+                                            // Handle collision with existing user (if there is already the same email in the firebase)
+                                            Toast.makeText(Register.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             });
