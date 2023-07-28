@@ -31,4 +31,7 @@
     <string name="Now_playing">Now Playing</string>
     <string name="Top_Rated">Top Rated</string>
     <string name="Upcoming">Upcoming</string>
+
+    <!-- Genre page strings -->
+    <string name="done">done</string>
 </resources>

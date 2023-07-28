@@ -13,10 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,6 +42,10 @@ import sg.edu.np.mad.moviespaceapp.SendFameDialog.SendFameDialog;
 public class MainActivity extends AppCompatActivity{
     SearchView search_view;
     RecyclerView recycler_view_home;
+
+    ListView listViewData;
+    ArrayAdapter<String> adapter;
+    String[] arrayPeliculas = {"Action/Adventure", "Crime", "Sci-Fi"};
 
     private static String popular_JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
 
@@ -81,11 +90,38 @@ public class MainActivity extends AppCompatActivity{
         fragmentTransaction.replace(R.id.frameLayout,fragment);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+        //return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.item_done){
+            String itemSelected = "Selected items: /n";
+            for (int i=0;i<listViewData.getCount();i++){
+                if(listViewData.isItemChecked(i)){
+                    itemSelected += listViewData.getItemAtPosition(i) + "/n";
+                }
+            }
+            Toast.makeText(this, "itemSelected", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
     //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        listViewData = findViewById(R.id.listView_data);
+
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, arrayPeliculas);
+        listViewData.setAdapter(adapter);
 
 
         // default fragment page
