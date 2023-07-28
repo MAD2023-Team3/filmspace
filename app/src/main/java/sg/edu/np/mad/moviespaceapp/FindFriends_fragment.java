@@ -2,6 +2,7 @@ package sg.edu.np.mad.moviespaceapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,12 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class FindFriends_fragment extends Fragment {
 
@@ -54,24 +59,21 @@ public class FindFriends_fragment extends Fragment {
         userUid = user.getUid();
         documentReference_user = firestoredb.collection("users").document(userUid);
 
-        /*// reading the documentReference_user db
-        documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                // Retrieve field field
-                String username = documentSnapshot.getString("username");
-                String email = documentSnapshot.getString("email");
-                Double fame = documentSnapshot.getDouble("fame");
-                Integer int_fame = fame.intValue();
-                // sets the values
-                profile_fame.setText(int_fame.toString());
-                profile_email.setText(email);
-                profile_username.setText(username);
+       firestoredb.collection("users")
+               .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                            }
+                        } else {
 
-                // Use the field value as needed
-                Log.d("Firestore", "Field value: " + username);
-            }
-        });*/
+                        }
+                    }
+                });
+
 
     }
 }

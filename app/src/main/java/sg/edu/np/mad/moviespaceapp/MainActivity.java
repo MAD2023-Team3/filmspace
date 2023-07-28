@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity{
     //navbar and nav drawer
     DrawerLayout drawerLayout;
     ImageView btn_menu;
-    LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors;
+    LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors,btn_findfriends;
     LinearLayout btn_upcoming,btn_popular_movies,btn_now_playing,btn_top_rated;
     TextView profile_username,profile_uid,nav_fame;
     //
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity{
         btn_logout = findViewById(R.id.nav_logout);
         btn_watch_later = findViewById(R.id.nav_watchlater);
         btn_popular_actors = findViewById(R.id.btn_popular_actor);
+        btn_findfriends = findViewById(R.id.nav_findFriends);
 
         // movies category buttons
         btn_upcoming = findViewById(R.id.nav_upcoming);
@@ -236,6 +237,14 @@ public class MainActivity extends AppCompatActivity{
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        btn_findfriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new FindFriends_fragment());
+                closeDrawer(drawerLayout);
             }
         });
         //
