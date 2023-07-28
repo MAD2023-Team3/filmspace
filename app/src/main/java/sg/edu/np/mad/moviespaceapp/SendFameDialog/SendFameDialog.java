@@ -19,11 +19,13 @@ import sg.edu.np.mad.moviespaceapp.R;
 
 public class SendFameDialog extends AppCompatDialogFragment {
     private EditText editTextsentfame;
-    private SendFameDialogListener listener;
+    public interface OnInputSelected{
+        void sendInput(int input);
+    }
+    public OnInputSelected monInputSelected;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        listener = (SendFameDialogListener) getTargetFragment();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -39,14 +41,11 @@ public class SendFameDialog extends AppCompatDialogFragment {
                 .setPositiveButton("send", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Scanner scanner = new Scanner(System.in);  // Create a Scanner object
-
                         try {
                             String sentfame = editTextsentfame.getText().toString();
-                            Integer int_sentfame = Integer.parseInt(sentfame);
+                            int int_sentfame = Integer.parseInt(sentfame);
 
-                            // send data back to fragment
-                            ((SendFameDialogListener) getTargetFragment()).getinputedfame(int_sentfame);
+                            monInputSelected.sendInput(int_sentfame);
                         }catch(Exception e){
 
                         }
@@ -57,18 +56,13 @@ public class SendFameDialog extends AppCompatDialogFragment {
 
         return builder.create();
     }
-   /* @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
-            listener = (SendFameDialogListener) context;
+            monInputSelected = (OnInputSelected) getTargetFragment();
         } catch (ClassCastException e) {
             Log.d("e",e.toString());
         }
-    }*/
-
-    public interface SendFameDialogListener {
-        void getinputedfame(Integer data);
     }
 }
