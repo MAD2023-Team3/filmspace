@@ -105,24 +105,6 @@
                             android:textSize="20dp" />
                     </LinearLayout>
 
-                    <!--FindFriends button-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="12dp"
-                        android:id="@+id/nav_findFriends">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:text="Find Friends"
-                            android:textSize="20dp"
-                            android:drawableLeft="@drawable/btn_findfriends"
-                            android:drawablePadding="8dp"/>
-                    </LinearLayout>
-
                     <!--watch later button-->
                     <LinearLayout
                         android:layout_width="wrap_content"
