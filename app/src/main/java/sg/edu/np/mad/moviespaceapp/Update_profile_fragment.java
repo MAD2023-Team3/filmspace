@@ -102,16 +102,21 @@ public class Update_profile_fragment extends Fragment {
         documentReference_user = firestoredb.collection("users").document(userUid);
         StorageReference firebasestorage_reference = FirebaseStorage.getInstance().getReference().child("profile_pic").child(userUid);
 
-        /*if(selectedImageUri!=null){
-            firebasestorage_reference.putFile(selectedImageUri)
-                    .addOnCompleteListener(task -> {
-                        // fragment transaction
-                        getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Profilefragment()).commit();
-                    });
-        }else{
-            // fragment transaction
-            getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Profilefragment()).commit();
-        }*/
+        upload_profile_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedImageUri!=null){
+                    firebasestorage_reference.putFile(selectedImageUri)
+                            .addOnCompleteListener(task -> {
+                                // fragment transaction
+                                getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Profilefragment()).commit();
+                            });
+                }else{
+                    // fragment transaction
+                    getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Profilefragment()).commit();
+                }
+            }
+        });
 
     }
 }
