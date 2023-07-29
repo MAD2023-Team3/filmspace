@@ -17,8 +17,6 @@
 
     <!-- navbar strings -->
     <string name="navbar_title">FilmSpace</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- movie details -->
     <string name="movie_title">Movie Title</string>
