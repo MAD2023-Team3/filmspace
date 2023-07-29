@@ -74,9 +74,37 @@ public class Update_profile_fragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.update_profile_fragment, container, false);
 
+        // firebase
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        StorageReference firebasestorage_reference = FirebaseStorage.getInstance().getReference().child("profile_pic").child(userUid);
+
         default_profile_pic = view.findViewById(R.id.default_profile_picture);
         upload_profile_pic_btn = view.findViewById(R.id.upload_profilepic_btn);
         upload_profile_btn = view.findViewById(R.id.upload_profile_btn);
+
+        // set current photo in the default profile pic
+        firebasestorage_reference.getDownloadUrl()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Uri uri  = task.getResult();
+                        Glide.with(getContext()).load(uri).apply(RequestOptions.circleCropTransform()).into(default_profile_pic);
+                    }
+                });
+
+        return view;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        // firestore database(update values)
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        documentReference_user = firestoredb.collection("users").document(userUid);
+        StorageReference firebasestorage_reference = FirebaseStorage.getInstance().getReference().child("profile_pic").child(userUid);
 
         upload_profile_pic_btn.setOnClickListener((v)->{
             ImagePicker.with(this).cropSquare().compress(512).maxResultSize(512,512)
@@ -88,19 +116,6 @@ public class Update_profile_fragment extends Fragment {
                         }
                     });
         });
-
-        return view;
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        // firestore database
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        firestoredb = FirebaseFirestore.getInstance();
-        userUid = user.getUid();
-        documentReference_user = firestoredb.collection("users").document(userUid);
-        StorageReference firebasestorage_reference = FirebaseStorage.getInstance().getReference().child("profile_pic").child(userUid);
 
         upload_profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override

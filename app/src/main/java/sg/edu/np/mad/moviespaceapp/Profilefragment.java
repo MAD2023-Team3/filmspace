@@ -1,5 +1,6 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,12 +13,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class Profilefragment extends Fragment {
 
@@ -32,6 +37,7 @@ public class Profilefragment extends Fragment {
     //
    TextView profile_username,profile_email,profile_fame;
     Button edit_profile_btn;
+    ImageView default_profile_picture;
 
     public Profilefragment() {
         // Required empty public constructor
@@ -43,17 +49,33 @@ public class Profilefragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profilefragment, container, false);
-        // firestore database
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        firestoredb = FirebaseFirestore.getInstance();
-        userUid = user.getUid();
-        documentReference_user = firestoredb.collection("users").document(userUid);
 
         profile_fame = view.findViewById(R.id.fame_count);
         profile_email = view.findViewById(R.id.emailfrag_email);
         profile_username = view.findViewById(R.id.profilefrag_username);
         edit_profile_btn = view.findViewById(R.id.edit_profile_btn);
+        default_profile_picture = view.findViewById(R.id.default_profile_picture);
+
+        edit_profile_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Update_profile_fragment fragment = new Update_profile_fragment();
+                getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
+            }
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        // firestore database
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        documentReference_user = firestoredb.collection("users").document(userUid);
+        StorageReference firebasestorage_reference = FirebaseStorage.getInstance().getReference().child("profile_pic").child(userUid);
 
         // reading the documentReference_user db
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -74,16 +96,13 @@ public class Profilefragment extends Fragment {
             }
         });
 
+        firebasestorage_reference.getDownloadUrl()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Uri uri  = task.getResult();
+                        Glide.with(getContext()).load(uri).apply(RequestOptions.circleCropTransform()).into(default_profile_picture);
+                    }
+                });
 
-        edit_profile_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("SSSSSSSSSSSSSSSSSS","FUCKKKKKKKKKKKK");
-                Update_profile_fragment fragment = new Update_profile_fragment();
-                getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
-            }
-        });
-
-        return view;
     }
 }
