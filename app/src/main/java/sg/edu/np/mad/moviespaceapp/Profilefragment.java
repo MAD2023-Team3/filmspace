@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +31,7 @@ public class Profilefragment extends Fragment {
     FirebaseFirestore firestoredb;
     //
    TextView profile_username,profile_email,profile_fame;
+    Button edit_profile_btn;
 
     public Profilefragment() {
         // Required empty public constructor
@@ -50,6 +53,7 @@ public class Profilefragment extends Fragment {
         profile_fame = view.findViewById(R.id.fame_count);
         profile_email = view.findViewById(R.id.emailfrag_email);
         profile_username = view.findViewById(R.id.profilefrag_username);
+        edit_profile_btn = view.findViewById(R.id.edit_profile_btn);
 
         // reading the documentReference_user db
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -67,6 +71,16 @@ public class Profilefragment extends Fragment {
 
                 // Use the field value as needed
                 Log.d("Firestore", "Field value: " + username);
+            }
+        });
+
+
+        edit_profile_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SSSSSSSSSSSSSSSSSS","FUCKKKKKKKKKKKK");
+                Update_profile_fragment fragment = new Update_profile_fragment();
+                getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
             }
         });
 
