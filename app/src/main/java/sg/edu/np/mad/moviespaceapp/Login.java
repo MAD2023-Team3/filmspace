@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity {
                                                 if (task.isSuccessful()) {
                                                     DocumentSnapshot document = task.getResult();
                                                     if (document.exists()) {
-                                                        if (document.contains("genres")) {
+                                                        if (document.contains("Genre_list")) {
                                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                                             startActivity(intent);
                                                         }

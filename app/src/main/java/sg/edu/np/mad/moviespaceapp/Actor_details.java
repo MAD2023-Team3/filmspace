@@ -189,7 +189,6 @@ public class Actor_details extends Fragment implements SendFameDialog.OnInputSel
         docref_actor =firestoredb.collection("actors").document(actor_id);
         //
 
-        Log.d("fafafafafafaf",String.valueOf(sent_fame));
         // get user's fame count
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
