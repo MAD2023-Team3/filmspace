@@ -49,7 +49,8 @@ Wesley Loh
 - Add friends 
   - Get movie recommendations from friends
   - View friends' profiles
-
+- Update profile
+  - Upload profile_picture and username
 ### Kwok Jing Xuan
 - Notifications
   - New shows
