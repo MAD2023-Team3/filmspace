@@ -50,6 +50,9 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     private static String Top_Rated_JSON_URL ="https://api.themoviedb.org/3/movie/top_rated?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     String top_rated_api_tag = "top_rated_api_tag";
 
+    private static String All_Genres_JSON_URL = "https://api.themoviedb.org/3/genre/movie/list?api_key=d51877fbcef44b5e6c0254522b9c1a35";
+    String all_genres_api_tag = "all_genres_api_tag";
+
 
 
     //
@@ -76,6 +79,8 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         now_playing_api_movielist = new ArrayList<>();
         top_rated_movielist = new ArrayList<>();
 
+
+
         // popular recycler view
         popular_recyclerView = view.findViewById(R.id.recyclerview);
 
@@ -87,6 +92,9 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
         // top rated recycler view
         top_rated_recyclerview = view.findViewById(R.id.top_rated_recyclerView);
+
+        //all genre recycler view
+
 
         // api request
         GetData getData_popular = new GetData(popular_JSON_URL,popular_api_tag,popular_recyclerView);
@@ -100,8 +108,6 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
         GetData getData_now_playing = new GetData(Now_Playing_JSON_URL,now_playing_api_tag,now_playing_recyclerview);
         getData_now_playing.execute();
-
-
         // end: movie recycler view
 
         return view;
@@ -109,53 +115,53 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
     // start: code block for GetData
     public class GetData extends AsyncTask<String,String,String> {
-        private String jsonUrl;
-        private String api_tag;
+            private String jsonUrl;
+            private String api_tag;
 
-        private RecyclerView recyclerView;
+            private RecyclerView recyclerView;
 
-        public GetData(String jsonUrl,String api_tag,RecyclerView recyclerView){
-            this.recyclerView = recyclerView;
-            this.jsonUrl = jsonUrl;
-            this.api_tag = api_tag;
-        }
-        @Override
-        protected String doInBackground(String... strings){
-            String current = "";
-
-            try{
-                URL url;
-                HttpURLConnection urlConnection = null;
-
-                try {
-                    url = new URL(jsonUrl);
-                    urlConnection = (HttpURLConnection) url.openConnection();
-
-                    InputStream is = urlConnection.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(is);
-
-                    int data = isr.read();
-                    while(data != -1){
-                        current += (char) data;
-                        data = isr.read();
-
-                    }
-                    return current;
-
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }finally {
-                    if(urlConnection!= null){
-                        urlConnection.disconnect();;
-                    }
-                }
-            } catch (Exception e){
-                e.printStackTrace();
+            public GetData(String jsonUrl,String api_tag,RecyclerView recyclerView){
+                this.recyclerView = recyclerView;
+                this.jsonUrl = jsonUrl;
+                this.api_tag = api_tag;
             }
-            return current;
-        }
+            @Override
+            protected String doInBackground(String... strings){
+                String current = "";
+
+                try{
+                    URL url;
+                    HttpURLConnection urlConnection = null;
+
+                    try {
+                        url = new URL(jsonUrl);
+                        urlConnection = (HttpURLConnection) url.openConnection();
+
+                        InputStream is = urlConnection.getInputStream();
+                        InputStreamReader isr = new InputStreamReader(is);
+
+                        int data = isr.read();
+                        while(data != -1){
+                            current += (char) data;
+                            data = isr.read();
+
+                        }
+                        return current;
+
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }finally {
+                        if(urlConnection!= null){
+                            urlConnection.disconnect();;
+                        }
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                return current;
+            }
 
         // end: code block for GetData
 
