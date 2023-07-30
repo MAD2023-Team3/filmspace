@@ -52,10 +52,12 @@
         android:layout_marginStart="41dp"
         android:layout_marginTop="273dp"
         android:text="Username"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:textColor="@color/white"
         android:id="@+id/update_username_editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

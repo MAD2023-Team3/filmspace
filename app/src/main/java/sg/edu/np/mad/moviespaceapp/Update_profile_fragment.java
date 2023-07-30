@@ -99,7 +99,6 @@ public class Update_profile_fragment extends Fragment {
         upload_profile_btn = view.findViewById(R.id.upload_profile_btn);
         username_editText = view.findViewById(R.id.update_username_editText);
 
-        username= String.valueOf(username_editText.getText());
         // set current photo in the default profile pic
         firebasestorage_reference.getDownloadUrl()
                 .addOnCompleteListener(task -> {
@@ -136,39 +135,51 @@ public class Update_profile_fragment extends Fragment {
         upload_profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                username= String.valueOf(username_editText.getText());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Alert")
+                        .setMessage("Are you sure you want to update?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // update firestore
+                                // Data to be added to the new document
+                                if(!TextUtils.isEmpty(username)){
+                                    Map<String, Object> newData = new HashMap<>();
+                                    newData.put("username", username_editText.getText().toString());
 
-                // update firestore
-                // Data to be added to the new document
-                if(!TextUtils.isEmpty(username)){
-                    Map<String, Object> newData = new HashMap<>();
-                    newData.put("username", username_editText.getText().toString());
+                                    documentReference_user.set(newData, SetOptions.merge())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d("Success","Success");
 
-                    documentReference_user.set(newData, SetOptions.merge())
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("Success","Success");
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
 
+                                                }
+                                            });
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
 
+                                // upload/update image to firebase storage
+                                if(selectedImageUri!=null){
+                                    firebasestorage_reference.putFile(selectedImageUri)
+                                            .addOnCompleteListener(task -> {
+                                            });
+                                }else{
                                 }
-                            });
-                }
-
-                // upload/update image to firebase storage
-                if(selectedImageUri!=null){
-                    firebasestorage_reference.putFile(selectedImageUri)
-                            .addOnCompleteListener(task -> {
-                                // fragment transaction
                                 getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Profilefragment()).commit();
-                            });
-                }else{
-                    // fragment transaction
-                    getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Profilefragment()).commit();
-                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked Cancel button, perform any action if needed
+                                dialog.dismiss(); // Close the dialog
+                            }
+                        });
+                builder.show();
+
             }
         });
 
