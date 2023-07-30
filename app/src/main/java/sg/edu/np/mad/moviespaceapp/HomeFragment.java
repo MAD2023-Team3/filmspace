@@ -274,8 +274,12 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         JSONArray array = jsonObject1.getJSONArray("genre_ids");
                         Log.d("ARRAY LENG",String.valueOf(array.length()));
                         for (int in = 0; in < array.length(); in++){
+                            // genreid in api [3,28,12]
                             Log.d("fav_movie",array.getString(in));
+                            boolean foundMatch = false; // Flag to indicate if a match is found for the current 'in'
+
                             for(int n = 0; n < user_fav_genre_list.size(); n++){
+                                // genreid in user [28,12]
                                 if(user_fav_genre_list.contains(array.getString(in))){
                                     Log.d("fav_movie",array.getString(in) + jsonObject1.getString("original_title"));
 
@@ -284,8 +288,14 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                                     model.setImg(jsonObject1.getString("poster_path"));
 
                                     genre_movielist.add(model);
+
+                                    foundMatch =true;
                                     break;
                                 }
+                            }
+
+                            if (foundMatch) {
+                                break;
                             }
                         }
 
