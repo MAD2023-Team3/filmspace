@@ -135,7 +135,6 @@ public class Register extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Void unused) {
                                                         Log.d(TAG,"success firestore");
-                                                        return null;
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override

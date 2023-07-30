@@ -102,7 +102,6 @@ public class WatchLaterfragment extends Fragment implements HomeRecyclerViewInte
                     GetData getData = new GetData(JSON_URL);
                     getData.execute();
                 }
-                return null;
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
