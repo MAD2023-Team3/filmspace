@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                     // MovieModelClass and inserts that in movieList
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
+                    
                         MovieModelClass model = new MovieModelClass();
                         model.setId(jsonObject1.getString("id"));
                         model.setImg(jsonObject1.getString("poster_path"));

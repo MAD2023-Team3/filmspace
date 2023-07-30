@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,7 @@ public class Update_profile_fragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Uri uri  = task.getResult();
+                        Log.d("URI",String.valueOf(uri));
                         Glide.with(getContext()).load(uri).apply(RequestOptions.circleCropTransform()).into(default_profile_pic);
                     }
                 });
