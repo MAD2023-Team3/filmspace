@@ -11,6 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,14 +58,9 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     private static String Top_Rated_JSON_URL ="https://api.themoviedb.org/3/movie/top_rated?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     String top_rated_api_tag = "top_rated_api_tag";
 
-    private static String All_Genres_JSON_URL = "https://api.themoviedb.org/3/genre/movie/list?api_key=d51877fbcef44b5e6c0254522b9c1a35";
-    String all_genres_api_tag = "all_genres_api_tag";
-
     private static String All_Movies_JSON_URL = "https://api.themoviedb.org/3/discover/movie?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     String all_movies_api_tag = "all_movies_api_tag";
-
-    ArrayList<String> genre_list = new ArrayList<>(Arrays.asList("28"));
-
+    List<Integer> user_fav_genre_list;
     //
 
     public HomeFragment() {
@@ -100,6 +101,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         //all genre recycler view
         fav_genre_recyclerview = view.findViewById(R.id.all_genres_recyclerview);
 
+        getFavGenreList();
         // api request
         GetData getData_popular = new GetData(popular_JSON_URL,popular_api_tag,popular_recyclerView);
         getData_popular.execute();
@@ -113,8 +115,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         GetData getData_now_playing = new GetData(Now_Playing_JSON_URL,now_playing_api_tag,now_playing_recyclerview);
         getData_now_playing.execute();
 
-        GetData getData_fav_genre = new GetData(All_Movies_JSON_URL,all_movies_api_tag,fav_genre_recyclerview);
-        getData_fav_genre.execute();
+        getFavGenreList();
         // end: movie recycler view
 
         return view;
@@ -274,8 +275,8 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         Log.d("ARRAY LENG",String.valueOf(array.length()));
                         for (int in = 0; in < array.length(); in++){
                             Log.d("fav_movie",array.getString(in));
-                            for(int n = 0; n < genre_list.size(); n++){
-                                if(genre_list.contains(array.getString(in))){
+                            for(int n = 0; n < user_fav_genre_list.size(); n++){
+                                if(user_fav_genre_list.contains(array.getString(in))){
                                     Log.d("fav_movie",array.getString(in) + jsonObject1.getString("original_title"));
 
                                     MovieModelClass model = new MovieModelClass();
@@ -331,4 +332,18 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     // end: when clicking on a recyclerview item
 
     // end: recyclerview code block
+
+    void getFavGenreList(){
+        DocumentReference documentReference_user = FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        // reading the documentReference_user db
+        documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user_fav_genre_list = (List<Integer>) documentSnapshot.get("Genre_list");
+                GetData getData_fav_genre = new GetData(All_Movies_JSON_URL,all_movies_api_tag,fav_genre_recyclerview);
+                getData_fav_genre.execute();
+            }
+        });
+    }
 }

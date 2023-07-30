@@ -67,6 +67,7 @@ public class Profilefragment extends Fragment {
 
                 // Use the field value as needed
                 Log.d("Firestore", "Field value: " + username);
+                return null;
             }
         });
 
