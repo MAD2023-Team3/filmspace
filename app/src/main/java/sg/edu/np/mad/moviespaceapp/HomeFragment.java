@@ -53,6 +53,9 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     private static String All_Genres_JSON_URL = "https://api.themoviedb.org/3/genre/movie/list?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     String all_genres_api_tag = "all_genres_api_tag";
 
+    private static String All_Movies_JSON_URL = "https://api.themoviedb.org/3/discover/movie?api_key=d51877fbcef44b5e6c0254522b9c1a35";
+    String all_movies_api_tag = "all_movies_api_tag";
+
 
 
     //
