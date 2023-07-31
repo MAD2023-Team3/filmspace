@@ -125,6 +125,7 @@ public class Register extends AppCompatActivity {
                                         // add user data into realtime firebase database
                                         userID = mAuth.getCurrentUser().getUid();
                                         Map<String, Object> user = new HashMap<>();
+                                        user.put("userId",userID);
                                         user.put("email",email);
                                         user.put("password",password);
                                         user.put("username",username);
