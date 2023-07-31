@@ -8,6 +8,8 @@ public class FindFriendViewModel {
     String userId;
     Uri user_profile_picture;
     String username;
+
+    String fcmToken;
     public FindFriendViewModel() {
 
     }
@@ -38,5 +40,13 @@ public class FindFriendViewModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

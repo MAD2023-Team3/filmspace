@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ public class FindFriends_fragment extends Fragment {
     //
     FindFriendAdaptor adaptor;
     SearchView searchbarView;
+    Button friend_request_received_btn;
     public FindFriends_fragment() {
         // Required empty public constructor
     }
@@ -53,6 +55,7 @@ public class FindFriends_fragment extends Fragment {
 
         findFriends_recyclerview = view.findViewById(R.id.findFriends_recyclerview);
         searchbarView = view.findViewById(R.id.searchView_friend);
+        friend_request_received_btn =view.findViewById(R.id.Friend_request_received);
 
         searchbarView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -66,6 +69,14 @@ public class FindFriends_fragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 // Perform real-time filtering or search operations here
                 return false;
+            }
+        });
+
+        friend_request_received_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // fragment transaction
+                getFragmentManager().beginTransaction().replace(R.id.frameLayout,new Friend_request_fragment()).commit();
             }
         });
 
