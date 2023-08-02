@@ -38,6 +38,7 @@ public class Profilefragment extends Fragment {
    TextView profile_username,profile_email,profile_fame;
     Button edit_profile_btn;
     ImageView default_profile_picture;
+    View friend_request_button;
 
     public Profilefragment() {
         // Required empty public constructor
@@ -55,7 +56,7 @@ public class Profilefragment extends Fragment {
         profile_username = view.findViewById(R.id.profilefrag_username);
         edit_profile_btn = view.findViewById(R.id.edit_profile_btn);
         default_profile_picture = view.findViewById(R.id.default_profile_picture);
-
+        friend_request_button = view.findViewById(R.id.btn_Friend_requests);
         edit_profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +65,14 @@ public class Profilefragment extends Fragment {
             }
         });
 
+        friend_request_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // fragment transaction
+                Friend_request_fragment fragment = new Friend_request_fragment();
+                getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
+            }
+        });
         return view;
     }
 
