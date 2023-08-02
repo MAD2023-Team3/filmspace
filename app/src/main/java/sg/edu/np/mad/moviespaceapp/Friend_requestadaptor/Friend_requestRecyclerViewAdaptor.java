@@ -1,5 +1,6 @@
 package sg.edu.np.mad.moviespaceapp.Friend_requestadaptor;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,23 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.auth.User;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sg.edu.np.mad.moviespaceapp.Friend_request_fragment;
 import sg.edu.np.mad.moviespaceapp.Model.LeaderboardModelClass;
@@ -62,8 +74,66 @@ class Friend_requestViewHolder extends RecyclerView.ViewHolder{
         add_friend_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseFirestore firestoredb = FirebaseFirestore.getInstance();
+                String friend_request_Uid = adaptor.Friend_Requests.get(getAbsoluteAdapterPosition()).getUserId();
+                DocumentReference user_documentreferece = firestoredb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                // users friend request list
+                user_documentreferece.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                if(document.contains("Friend_Request")){
+                                    // removes the recyclerview item from adaptor
+                                    adaptor.Friend_Requests.remove(getAbsoluteAdapterPosition());
+                                    adaptor.notifyItemRemoved(getAbsoluteAdapterPosition());
 
-                adaptor.Friend_Requests.remove(getAbsoluteAdapterPosition());
+                                    List<String> Friend_request_list = (List<String>)document.get("Friend_Request");
+                                    // removes the friend request from the firestore
+                                    Friend_request_list.remove(friend_request_Uid);
+
+                                    // update values
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Friend_Request", Friend_request_list);
+
+                                    firestoredb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .set(data, SetOptions.merge());
+
+                                    // adds the friend uid to a Friends_list in firestore
+                                    user_documentreferece.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.contains("Friends_list")) {
+                                                    List<String> Friends_list = (List<String>)document.get("Friends_list");
+                                                    Friends_list.add(friend_request_Uid);
+
+                                                    // update values
+                                                    Map<String, Object> data = new HashMap<>();
+                                                    data.put("Friends_list", Friends_list);
+
+                                                    firestoredb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                            .set(data, SetOptions.merge());
+                                                }else {
+                                                    // update values
+                                                    ArrayList<String> Friends_list = new ArrayList<>();
+                                                    Friends_list.add(friend_request_Uid);
+                                                    Map<String, Object> data = new HashMap<>();
+                                                    data.put("Friends_list", Friends_list);
+
+                                                    firestoredb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                            .set(data, SetOptions.merge());
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
             }
         });
     }

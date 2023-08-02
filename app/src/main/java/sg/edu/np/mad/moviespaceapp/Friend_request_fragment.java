@@ -104,6 +104,7 @@ public class Friend_request_fragment extends Fragment {
                             UserModelClass user_friend_request = new UserModelClass();
                             // get what information is needed
                             user_friend_request.setUsername(document.getString("username"));
+                            user_friend_request.setUserId(document.getString("userId"));
                             Friend_Request.add(user_friend_request);
                             // when an item is added to Friend_Request, update recyclerview
                             adaptor.notifyItemInserted(Friend_Request.size()-1);
