@@ -1,5 +1,7 @@
 package sg.edu.np.mad.moviespaceapp.Friend_adaptor;
 
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,6 +24,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -38,8 +44,10 @@ public class Friend_RecyclerView_Adaptor extends RecyclerView.Adapter<Friend_Vie
 
     List<UserModelClass> Friend_list;
     private final Friend_RecyclerView_Interface friend_RecyclerView_Interface;
-    public Friend_RecyclerView_Adaptor(List<UserModelClass> friend_list,Friend_RecyclerView_Interface friend_RecyclerView_Interface) {
+    Context context;
+    public Friend_RecyclerView_Adaptor(List<UserModelClass> friend_list,Context context,Friend_RecyclerView_Interface friend_RecyclerView_Interface) {
         this.Friend_list = friend_list;
+        this.context = context;
         this.friend_RecyclerView_Interface = friend_RecyclerView_Interface;
     }
 
@@ -55,6 +63,16 @@ public class Friend_RecyclerView_Adaptor extends RecyclerView.Adapter<Friend_Vie
     public void onBindViewHolder(@NonNull Friend_ViewHolder holder, int position) {
         String username = Friend_list.get(position).getUsername();
         holder.user_name_text.setText(username);
+
+        // retrieve their profile_picture
+        StorageReference firebasestorage_reference = FirebaseStorage.getInstance().getReference().child("profile_pic").child(Friend_list.get(position).getUserId());
+        firebasestorage_reference.getDownloadUrl()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Uri uri = task.getResult();
+                        Glide.with(context).load(uri).apply(RequestOptions.circleCropTransform()).into(holder.friend_profile_pic);
+                    }
+                });
 
     }
 

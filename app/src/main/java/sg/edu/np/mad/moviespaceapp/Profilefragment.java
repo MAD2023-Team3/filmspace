@@ -138,7 +138,7 @@ public class Profilefragment extends Fragment implements Friend_RecyclerView_Int
 
     void setup_friend_request_recyclerview(List<UserModelClass> friends_list){
         friends_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adaptor = new Friend_RecyclerView_Adaptor(friends_list,this);
+        adaptor = new Friend_RecyclerView_Adaptor(friends_list,getContext(),this);
         LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         friends_recyclerView.setAdapter(adaptor);
         friends_recyclerView.setLayoutManager(myLayoutManager);
@@ -174,6 +174,11 @@ public class Profilefragment extends Fragment implements Friend_RecyclerView_Int
 
     @Override
     public void onItemClick(int position) {
-        Log.d("sdasad","JAAAAAAAAAAAAAAAAAAAAA");
+        Bundle bundle = new Bundle();
+        bundle.putString("friend_userId",Friends_list.get(position).getUserId());
+        Friend_details_fragment fragment = new Friend_details_fragment();
+        fragment.setArguments(bundle);
+        // fragment transaction
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
     }
 }

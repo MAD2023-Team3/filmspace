@@ -88,7 +88,7 @@ public class Friend_request_fragment extends Fragment {
     void setup_friend_request_recyclerview(ArrayList<UserModelClass> friend_request_list){
         RecyclerView recyclerView = view.findViewById(R.id.friend_request_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adaptor = new Friend_requestRecyclerViewAdaptor(friend_request_list);
+        adaptor = new Friend_requestRecyclerViewAdaptor(friend_request_list,getContext());
         recyclerView.setAdapter(adaptor);
     }
 
