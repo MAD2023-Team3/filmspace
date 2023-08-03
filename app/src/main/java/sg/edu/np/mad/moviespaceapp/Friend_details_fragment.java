@@ -1,9 +1,13 @@
 package sg.edu.np.mad.moviespaceapp;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,15 +30,27 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewAdapter;
+import sg.edu.np.mad.moviespaceapp.Homeadaptor.HomeRecyclerViewInterface;
+import sg.edu.np.mad.moviespaceapp.Model.MovieModelClass;
 import sg.edu.np.mad.moviespaceapp.Model.UserModelClass;
 import sg.edu.np.mad.moviespaceapp.SendFameDialog.SendFameDialog;
 
-public class Friend_details_fragment extends Fragment implements SendFameDialog.OnInputSelected {
+public class Friend_details_fragment extends Fragment implements SendFameDialog.OnInputSelected, HomeRecyclerViewInterface {
     View view;
     String friend_userId;
     // related to firestore db
@@ -48,9 +64,13 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
 
     List<String> watch_list;
     ImageView profile_picture;
+    List<MovieModelClass> movieList = new ArrayList<>();
     TextView friend_username;
     Button btn_send_fame_tofriend;
     TextView nav_fame;
+
+    RecyclerView friend_watch_later_list;
+    private String JSON_API = "https://api.themoviedb.org/3/movie/%s?api_key=d51877fbcef44b5e6c0254522b9c1a35";
     public Friend_details_fragment() {
         // Required empty public constructor
     }
@@ -64,6 +84,7 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
         profile_picture = view.findViewById(R.id.friend_profile_picture);
         friend_username = view.findViewById(R.id.friend_username);
         btn_send_fame_tofriend = view.findViewById(R.id.btn_send_fame_tofriend);
+        friend_watch_later_list = view.findViewById(R.id.friend_watch_later_list);
         // set Textview
         nav_fame = getActivity().findViewById(R.id.nav_fame);
 
@@ -104,6 +125,13 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
                         friend_user.setUserId(document.getString("userId"));
                         friend_user.setUsername(document.getString("username"));
                         friend_user.setFame(document.getLong("fame").intValue());
+
+                        // sends api to search for these movies
+                        for(int i =0;i< friend_user.getWatchlist_array().size();i++){
+                            String JSON_URL = String.format(JSON_API,friend_user.getWatchlist_array().get(i));
+                            GetData getData = new GetData(JSON_URL);
+                            getData.execute();
+                        }
 
                         // displaying the information
                         friend_username.setText(friend_user.getUsername());
@@ -176,4 +204,95 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
         });
 
     }
+
+
+    // start: code block for GetData
+    public class GetData extends AsyncTask<String,String,String> {
+        private String jsonUrl;
+
+        public GetData(String jsonUrl){
+            this.jsonUrl = jsonUrl;
+        }
+        @Override
+        protected String doInBackground(String... strings){
+            String current = "";
+
+            try{
+                URL url;
+                HttpURLConnection urlConnection = null;
+
+                try {
+                    Log.d("JSON",jsonUrl);
+                    url = new URL(jsonUrl);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+
+                    InputStream is = urlConnection.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+
+                    int data = isr.read();
+                    while(data != -1){
+                        current += (char) data;
+                        data = isr.read();
+                    }
+                    return current;
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }finally {
+                    if(urlConnection!= null){
+                        urlConnection.disconnect();;
+                    }
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return current;
+        }
+
+        // end: code block for GetData
+
+        // start: converting json into object
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                JSONObject jsonObject = new JSONObject(s);
+
+                // scans the jsonArray received from api request turns the request to
+                // MovieModelClass and inserts that in movieList
+
+                MovieModelClass model = new MovieModelClass();
+                model.setId(jsonObject.getString("id"));
+                model.setMovie_name(jsonObject.getString("title"));
+                model.setImg(jsonObject.getString("poster_path"));
+                movieList.add(model);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+
+            putDataIntoRecyclerView(movieList,friend_watch_later_list,"");
+
+        }
+    }
+
+    // start: recyclerview code block sd
+    private void putDataIntoRecyclerView(List<MovieModelClass> movieList, RecyclerView recyclerView, String recyclerviewIdentifier){
+        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(getContext(),movieList,this,recyclerviewIdentifier);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager myLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerView.setLayoutManager(myLayoutManager);
+    }
+    @Override
+    public void onItemClick(int position,String recyclerViewIdentifier) {
+        Bundle bundle = new Bundle();
+        bundle.putString("Movie_Id",movieList.get(position).getId());
+
+        Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
+        movie_details_fragment.setArguments(bundle);
+        // fragment transaction
+        getParentFragmentManager().beginTransaction().replace(R.id.frameLayout,movie_details_fragment).commit();
+    }
+    // end: when clicking on a recyclerview item
+
 }
