@@ -100,9 +100,9 @@ public class Login extends AppCompatActivity {
                                         documentReference_user = firestoredb.collection("users").document(userUid);
                                         documentReference_user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+                                                if (t.isSuccessful()) {
+                                                    DocumentSnapshot document = t.getResult();
                                                     if (document.exists()) {
                                                         if (document.contains("Genre_list")) {
                                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -114,24 +114,11 @@ public class Login extends AppCompatActivity {
                                                         }
                                                         // Perform actions with the document data
                                                     } else {
-                                                        // Document(actor data) doesn't exist/ is not on db
 
-                                                        documentReference_user.set(userUid) // pushes actor hashmap to db
-                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                    @Override
-                                                                    public void onSuccess(Void unused) {
-                                                                        Log.d("UPDATES FIRESTORE ACTOR","success firestore");
-                                                                    }
-                                                                }).addOnFailureListener(new OnFailureListener() {
-                                                                    @Override
-                                                                    public void onFailure(@NonNull Exception e) {
-                                                                        Log.d("FAILES FIRESTORE ACTOR","fails firestore");
-                                                                    }
-                                                                });
                                                     }
                                                 } else {
                                                     // An error occurred while fetching the document
-                                                    Log.d("TAG", "Error getting document: " + task.getException());
+                                                    Log.d("TAG", "Error getting document: " + t.getException());
                                                 }
                                             }
                                         });
