@@ -167,5 +167,4 @@ public class FindFriendAdaptor extends FirestoreRecyclerAdapter<UserModelClass, 
 
         }
     }
-
 }
