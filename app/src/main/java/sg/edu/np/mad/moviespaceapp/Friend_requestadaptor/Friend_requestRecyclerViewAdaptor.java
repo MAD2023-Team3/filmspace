@@ -43,7 +43,7 @@ public class Friend_requestRecyclerViewAdaptor extends RecyclerView.Adapter<Frie
     @NonNull
     @Override
     public Friend_requestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.findfriends_recyclerview_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_request_reyclerview_item,parent,false);
 
         return new Friend_requestViewHolder(view).linkAdapter(this);
     }
@@ -63,15 +63,15 @@ public class Friend_requestRecyclerViewAdaptor extends RecyclerView.Adapter<Frie
 
 class Friend_requestViewHolder extends RecyclerView.ViewHolder{
     TextView user_name_text;
-    Button add_friend_btn;
+    Button friend_request_btn;
     private Friend_requestRecyclerViewAdaptor adaptor;
 
     public Friend_requestViewHolder(@NonNull View itemView){
         super(itemView);
 
         user_name_text = itemView.findViewById(R.id.user_name_text);
-        add_friend_btn = itemView.findViewById(R.id.add_friend_btn);
-        add_friend_btn.setOnClickListener(new View.OnClickListener() {
+        friend_request_btn = itemView.findViewById(R.id.friend_request_btn);
+        friend_request_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseFirestore firestoredb = FirebaseFirestore.getInstance();

@@ -27,6 +27,7 @@ import java.util.List;
 
 import sg.edu.np.mad.moviespaceapp.FindFriendadaptor.FindFriendAdaptor;
 import sg.edu.np.mad.moviespaceapp.Model.FindFriendViewModel;
+import sg.edu.np.mad.moviespaceapp.Model.UserModelClass;
 
 public class FindFriends_fragment extends Fragment {
 
@@ -119,8 +120,8 @@ public class FindFriends_fragment extends Fragment {
         Query query = allUserCollectionReference
                 .whereGreaterThanOrEqualTo("username",searchstring);
 
-        FirestoreRecyclerOptions<FindFriendViewModel> options = new FirestoreRecyclerOptions.Builder<FindFriendViewModel>()
-                .setQuery(query,FindFriendViewModel.class).build();
+        FirestoreRecyclerOptions<UserModelClass> options = new FirestoreRecyclerOptions.Builder<UserModelClass>()
+                .setQuery(query,UserModelClass.class).build();
 
 
         adaptor = new FindFriendAdaptor(options,getContext());

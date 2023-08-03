@@ -12,9 +12,13 @@ public class UserModelClass {
 
     String email;
 
-    ArrayList<String> Friend_Request;
+    List<String> Friend_Request;
 
-    ArrayList<String> watchlist_array;
+    List<String> watchlist_array;
+
+
+    List<String> Friends_list;
+
 
     int fame;
 
@@ -22,12 +26,13 @@ public class UserModelClass {
 
     }
 
-    public UserModelClass(String username, String userId, String email, ArrayList<String> friend_Request, ArrayList<String> watchlist_array, int fame) {
+    public UserModelClass(String username, String userId, String email, List<String> friend_Request, List<String> watchlist_array, List<String> friends_list, int fame) {
         this.username = username;
         this.userId = userId;
         this.email = email;
-        Friend_Request = friend_Request;
+        this.Friend_Request = friend_Request;
         this.watchlist_array = watchlist_array;
+        this.Friends_list = friends_list;
         this.fame = fame;
     }
 
@@ -55,20 +60,28 @@ public class UserModelClass {
         this.email = email;
     }
 
-    public ArrayList<String> getFriend_Request() {
+    public List<String> getFriend_Request() {
         return Friend_Request;
     }
 
-    public void setFriend_Request(ArrayList<String> friend_Request) {
+    public void setFriend_Request(List<String> friend_Request) {
         Friend_Request = friend_Request;
     }
 
-    public ArrayList<String> getWatchlist_array() {
+    public List<String> getWatchlist_array() {
         return watchlist_array;
     }
 
-    public void setWatchlist_array(ArrayList<String> watchlist_array) {
+    public void setWatchlist_array(List<String> watchlist_array) {
         this.watchlist_array = watchlist_array;
+    }
+
+    public List<String> getFriends_list() {
+        return Friends_list;
+    }
+
+    public void setFriends_list(List<String> friends_list) {
+        Friends_list = friends_list;
     }
 
     public int getFame() {

@@ -31,4 +31,7 @@
     <string name="Now_playing">Now Playing</string>
     <string name="Top_Rated">Top Rated</string>
     <string name="Upcoming">Upcoming</string>
+
+    <!-- Accept friend request button -->
+    <string name="accept_friend_request">Accept Friend</string>
 </resources>
