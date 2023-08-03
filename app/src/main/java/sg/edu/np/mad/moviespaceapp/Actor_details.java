@@ -201,7 +201,7 @@ public class Actor_details extends Fragment implements SendFameDialog.OnInputSel
                 Log.v("user_fame",String.valueOf(users_fame));
 
                 // check if user has more fame than the fame they are trying to send
-                if(users_fame>sent_fame){
+                if(users_fame >= sent_fame){
 
                     // user's new fame count
                     int new_users_fame = int_users_fame-sent_fame;

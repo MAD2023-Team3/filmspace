@@ -84,6 +84,8 @@ public class Register extends AppCompatActivity {
                 confirm_password = String.valueOf(editTextconfirmpassword.getText());
                 username = String.valueOf(editTextusername.getText());
                 List<String> watchlater_list=new ArrayList<String>();
+                List<String> Friends_List =new ArrayList<String>();
+                List<String> Friend_Request =new ArrayList<String>();
                 Integer fame = 100;
 
                 if(TextUtils.isEmpty(username)){
@@ -131,6 +133,8 @@ public class Register extends AppCompatActivity {
                                         user.put("username",username);
                                         user.put("watchlist_array",watchlater_list);
                                         user.put("fame",fame);
+                                        user.put("Friend_Request",Friend_Request);
+                                        user.put("Friends_list",Friends_List);
                                         firestore.collection("users").document(userID).set(user)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override

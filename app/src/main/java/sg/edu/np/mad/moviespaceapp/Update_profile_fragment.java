@@ -104,6 +104,7 @@ public class Update_profile_fragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Uri uri  = task.getResult();
+                        Log.d("URI",String.valueOf(uri));
                         Glide.with(getContext()).load(uri).apply(RequestOptions.circleCropTransform()).into(default_profile_pic);
                     }
                 });

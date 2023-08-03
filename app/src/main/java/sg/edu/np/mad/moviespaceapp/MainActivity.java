@@ -13,15 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,9 +38,7 @@ public class MainActivity extends AppCompatActivity{
     SearchView search_view;
     RecyclerView recycler_view_home;
 
-    ListView listViewData;
-    ArrayAdapter<String> adpater;
-    String[] arrayPeliculas = {"Action/Adventure", "Crime", "Spy"};
+
     private static String popular_JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
 
     private static String Upcoming_JSON_URL ="https://api.themoviedb.org/3/movie/upcoming?api_key=d51877fbcef44b5e6c0254522b9c1a35";
@@ -65,7 +58,7 @@ public class MainActivity extends AppCompatActivity{
     //navbar and nav drawer
     DrawerLayout drawerLayout;
     ImageView btn_menu;
-    LinearLayout btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors;
+    LinearLayout btn_findFriends,btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors;
     LinearLayout btn_upcoming,btn_popular_movies,btn_now_playing,btn_top_rated;
     TextView profile_username,profile_uid,nav_fame;
     //
@@ -96,7 +89,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    // default fragment page
+        // default fragment page
         replaceFragment(new HomeFragment());
         //
         // firestore database
@@ -145,6 +138,7 @@ public class MainActivity extends AppCompatActivity{
         btn_logout = findViewById(R.id.nav_logout);
         btn_watch_later = findViewById(R.id.nav_watchlater);
         btn_popular_actors = findViewById(R.id.btn_popular_actor);
+        btn_findFriends = findViewById(R.id.btn_findFriends);
 
         // movies category buttons
         btn_upcoming = findViewById(R.id.nav_upcoming);
@@ -177,6 +171,14 @@ public class MainActivity extends AppCompatActivity{
                 closeDrawer(drawerLayout);
             }
 
+        });
+
+        btn_findFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new FindFriends_fragment());
+                closeDrawer(drawerLayout);
+            }
         });
 
         btn_leaderboard.setOnClickListener(new View.OnClickListener() {
