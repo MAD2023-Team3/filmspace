@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     SearchView search_view;
     RecyclerView recycler_view_home;
 
+
     private static String popular_JSON_URL = "https://api.themoviedb.org/3/movie/popular?api_key=d51877fbcef44b5e6c0254522b9c1a35";
 
     private static String Upcoming_JSON_URL ="https://api.themoviedb.org/3/movie/upcoming?api_key=d51877fbcef44b5e6c0254522b9c1a35";
@@ -81,12 +82,12 @@ public class MainActivity extends AppCompatActivity{
         fragmentTransaction.replace(R.id.frameLayout,fragment);
         fragmentTransaction.commit();
     }
+
     //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         // default fragment page
         replaceFragment(new HomeFragment());
@@ -260,7 +261,6 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
-
     @Override
     protected void onPause(){
         super.onPause();

@@ -30,6 +30,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"></activity>
+
+        <activity
+            android:name=".GenreActivity"
+            android:label="Genre Activity">
+        </activity>
     </application>
 
 </manifest>
