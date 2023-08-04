@@ -138,7 +138,7 @@ public class Update_profile_fragment extends Fragment {
             public void onClick(View v) {
                 username= String.valueOf(username_editText.getText());
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Alert")
+                builder.setTitle("Update Profile")
                         .setMessage("Are you sure you want to update?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
