@@ -1,14 +1,18 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +24,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -66,7 +72,7 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
     ImageView profile_picture;
     List<MovieModelClass> movieList = new ArrayList<>();
     TextView friend_username;
-    Button btn_send_fame_tofriend;
+    Button btn_send_fame_tofriend,unfriend_btn;
     TextView nav_fame;
 
     RecyclerView friend_watch_later_list;
@@ -85,6 +91,8 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
         friend_username = view.findViewById(R.id.friend_username);
         btn_send_fame_tofriend = view.findViewById(R.id.btn_send_fame_tofriend);
         friend_watch_later_list = view.findViewById(R.id.friend_watch_later_list);
+        unfriend_btn = view.findViewById(R.id.unfriend_btn);
+
         // set Textview
         nav_fame = getActivity().findViewById(R.id.nav_fame);
 
@@ -112,6 +120,27 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
         userUid = user.getUid();
         documentReference_user = firestoredb.collection("users").document(userUid);
         StorageReference firebasestorage_reference_friend_profilepic = FirebaseStorage.getInstance().getReference().child("profile_pic").child(friend_userId);
+
+        unfriend_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Alert")
+                        .setMessage("Are you sure you want to unfriend?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                remove_friend();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked Cancel button, perform any action if needed
+                                dialog.dismiss(); // Close the dialog
+                            }
+                        });
+                builder.show();
+            }
+        });
 
         //get friend's info to display
         firestoredb.collection("users").document(friend_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -295,4 +324,52 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
     }
     // end: when clicking on a recyclerview item
 
+
+    public void remove_friend(){
+        // adds the friend uid to a Friends_list in firestore for the current user
+        documentReference_user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.contains("Friends_list")) {
+                        List<String> Friends_list = (List<String>)document.get("Friends_list");
+                        Friends_list.remove(friend_userId);
+
+                        // update values
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("Friends_list", Friends_list);
+
+                        firestoredb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .set(data, SetOptions.merge());
+                    }else {
+
+                    }
+                }
+            }
+        });
+
+        // friend
+        firestoredb.collection("users").document(friend_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.contains("Friends_list")) {
+                        List<String> Friends_list = (List<String>)document.get("Friends_list");
+                        Friends_list.remove(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                        // update values
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("Friends_list", Friends_list);
+
+                        firestoredb.collection("users").document(friend_userId)
+                                .set(data, SetOptions.merge());
+                    }else {
+
+                    }
+                }
+            }
+        });
+    }
 }
