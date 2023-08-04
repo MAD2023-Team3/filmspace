@@ -139,14 +139,40 @@ public class Login extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // start: Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(intent);
-            finish();
+            firestoredb = FirebaseFirestore.getInstance();
+            documentReference_user = firestoredb.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            documentReference_user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+                    if (t.isSuccessful()) {
+                        DocumentSnapshot document = t.getResult();
+                        if (document.exists()) {
+                            if (document.contains("Genre_list")) {
+                                // start: Check if user is signed in (non-null) and update UI accordingly.
+
+                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                            else {
+
+                            }
+                            // Perform actions with the document data
+                        } else {
+
+                        }
+                    } else {
+
+                    }
+                }
+            });
+            // end: Check if user is signed in (non-null) and update UI accordingly.
         }
 
-        // end: Check if user is signed in (non-null) and update UI accordingly.
+
     }
 }

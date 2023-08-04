@@ -76,6 +76,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_homefragment, container, false);
 
@@ -126,12 +127,17 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
         private String jsonUrl;
         private String api_tag;
 
+        private List<String> list;
         private RecyclerView recyclerView;
 
         public GetData(String jsonUrl, String api_tag, RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
             this.jsonUrl = jsonUrl;
             this.api_tag = api_tag;
+        }
+
+        public void setlist(List<String> list) {
+            this.list = list;
         }
 
         @Override
@@ -272,7 +278,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                         JSONArray array = jsonObject1.getJSONArray("genre_ids");
-                        Log.d("ARRAY LENG",String.valueOf(array.length()));
+
                         for (int in = 0; in < array.length(); in++){
                             // genreid in api [3,28,12]
                             Log.d("fav_movie",array.getString(in));
@@ -352,8 +358,10 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 user_fav_genre_list = (List<Integer>) documentSnapshot.get("Genre_list");
-                GetData getData_fav_genre = new GetData(All_Movies_JSON_URL,all_movies_api_tag,fav_genre_recyclerview);
-                getData_fav_genre.execute();
+                if(user_fav_genre_list != null){
+                    GetData getData_fav_genre = new GetData(All_Movies_JSON_URL,all_movies_api_tag,fav_genre_recyclerview);
+                    getData_fav_genre.execute();
+                }
             }
         });
     }

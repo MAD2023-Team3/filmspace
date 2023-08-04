@@ -70,7 +70,6 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
     ActorModelClass actorModelClass;
     List<ActorModelClass> actormodellist;
     RecyclerView actorrecyclerview;
-    LinearLayout add_watchlist_btn,remove_watchlist_btn;
     Button btn_watch_later;
     public Movie_details_fragment() {
         // Required empty public constructor
@@ -205,42 +204,6 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
                 }
             }
         });
-
-        add_watchlist_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // if watchlater_list does not contain movie_id of selected movie
-                // add it to watchlater_list
-                auth = FirebaseAuth.getInstance();
-                user = auth.getCurrentUser();
-                firestoredb = FirebaseFirestore.getInstance();
-                userUid = user.getUid();
-                documentReference_user = firestoredb.collection("users").document(userUid);
-
-                if(!watchlater_list.contains(movie_id)){
-                    watchlater_list.add(movie_id);
-
-                    // updating watchlater_list in firestore
-                    Map<String,Object> updatedData = new HashMap<>();
-                    updatedData.put("watchlist_array",watchlater_list);
-                    documentReference_user.set(updatedData, SetOptions.merge())
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    // when its already in your watch later
-                                    Toast.makeText(getContext(),"Added to Watch Later",Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-
-                                }
-                            });
-                }else{
-                }
-            }
-        });
-
 
     }
 

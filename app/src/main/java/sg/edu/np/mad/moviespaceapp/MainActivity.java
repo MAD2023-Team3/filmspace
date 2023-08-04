@@ -51,10 +51,8 @@ public class MainActivity extends AppCompatActivity{
     FirebaseUser user;
     DocumentReference documentReference_user;
     String userUid;
-    String username;
     FirebaseFirestore firestoredb;
     //
-
     //navbar and nav drawer
     DrawerLayout drawerLayout;
     ImageView btn_menu;
@@ -88,7 +86,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // default fragment page
         replaceFragment(new HomeFragment());
         //
