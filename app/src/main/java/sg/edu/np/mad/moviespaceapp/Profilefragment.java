@@ -1,5 +1,6 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -126,13 +129,13 @@ public class Profilefragment extends Fragment implements Friend_RecyclerView_Int
             }
         });
 
-        /*firebasestorage_reference.getDownloadUrl()
+        firebasestorage_reference.getDownloadUrl()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Uri uri = task.getResult();
                         Glide.with(getContext()).load(uri).apply(RequestOptions.circleCropTransform()).into(default_profile_picture);
                     }
-                });*/
+                });
 
     }
 
