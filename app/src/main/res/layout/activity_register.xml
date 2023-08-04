@@ -20,6 +20,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:text="@string/register_title"
             android:textSize="25sp"
@@ -33,6 +34,7 @@
                 android:id="@+id/register_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:hint="@string/username_hint" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -45,6 +47,7 @@
                 android:id="@+id/register_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:hint="@string/email_hint" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,6 +60,7 @@
                 android:id="@+id/register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:hint="@string/password_hint"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -70,6 +74,7 @@
                 android:id="@+id/register_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:hint="@string/confirmpassword_hint"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,15 +89,17 @@
             android:id="@+id/btn_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@string/register_title" />
 
         <TextView
             android:id="@+id/click_to_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:text="@string/click_to_login"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textStyle="bold" />
     </LinearLayout>
 
