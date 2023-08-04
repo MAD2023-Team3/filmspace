@@ -130,8 +130,6 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 remove_friend();
-                                // fragment transaction
-                                getFragmentManager().beginTransaction().replace(R.id.frameLayout, new Profilefragment()).commit();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -373,5 +371,6 @@ public class Friend_details_fragment extends Fragment implements SendFameDialog.
                 }
             }
         });
+        getFragmentManager().beginTransaction().replace(R.id.frameLayout, new Profilefragment()).commit();
     }
 }
