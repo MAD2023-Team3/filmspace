@@ -67,8 +67,9 @@ public class FindFriends_fragment extends Fragment {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String query) {
                 // Perform real-time filtering or search operations here
+                setupRecyclerView(query);
                 return false;
             }
         });
