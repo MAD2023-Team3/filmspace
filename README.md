@@ -47,6 +47,7 @@ Wesley Loh
 
 ### Warren Kenzie
 - Add friends 
+  - Send Friend request and Accept request
   - Get movie recommendations from friends
   - View friends' profiles
 - Update profile
