@@ -336,6 +336,7 @@ public class HomeFragment extends Fragment implements HomeRecyclerViewInterface 
 
         Movie_details_fragment movie_details_fragment = new Movie_details_fragment();
         movie_details_fragment.setArguments(bundle);
+
         // fragment transaction
         getFragmentManager().beginTransaction().replace(R.id.frameLayout, movie_details_fragment).commit();
     }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,7 +70,8 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
     ActorModelClass actorModelClass;
     List<ActorModelClass> actormodellist;
     RecyclerView actorrecyclerview;
-
+    LinearLayout add_watchlist_btn,remove_watchlist_btn;
+    Button btn_watch_later;
     public Movie_details_fragment() {
         // Required empty public constructor
     }
@@ -82,13 +84,9 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_movie_details_fragment, container, false);
 
-        // firestore database
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        firestoredb = FirebaseFirestore.getInstance();
-        userUid = user.getUid();
-        documentReference_user = firestoredb.collection("users").document(userUid);
-        //
+        // start: watch later code block
+        btn_watch_later = view.findViewById(R.id.btn_watch_later);
+
 
         // unpack the bundle
         Bundle bundle = getArguments();
@@ -110,6 +108,20 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
         actorrecyclerview = view.findViewById(R.id.cast_recyclerview);
         actormodellist = new ArrayList<ActorModelClass>();
 
+
+        return view;
+    }
+
+    public void onStart() {
+        super.onStart();
+        // firestore database
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        firestoredb = FirebaseFirestore.getInstance();
+        userUid = user.getUid();
+        documentReference_user = firestoredb.collection("users").document(userUid);
+        //
+
         // retrieving watchlater array from user info
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -124,40 +136,13 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
                     }
                 }
 
-                // start: watch later code block
-                Button btn_watch_later = view.findViewById(R.id.btn_watch_later);
+                if(watchlater_list.contains(movie_id)){
+                    btn_watch_later.setText("Remove WatchLater");
 
-                btn_watch_later.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // if watchlater_list does not contain movie_id of selected movie
-                        // add it to watchlater_list
-                        if(!watchlater_list.contains(movie_id)){
-                            watchlater_list.add(movie_id);
-
-                            // updating watchlater_list in firestore
-                            Map<String,Object> updatedData = new HashMap<>();
-                            updatedData.put("watchlist_array",watchlater_list);
-                            documentReference_user.set(updatedData, SetOptions.merge())
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            // when its already in your watch later
-                                            Toast.makeText(getContext(),"Added to Watch Later",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-
-                                        }
-                                    });
-                        }else{
-                            // when its already in your watch later
-                            Toast.makeText(getContext(),"Already added",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                // end: watch later code block
+                    // end: watch later code block
+                }else {
+                    btn_watch_later.setText("Add WatchLater");
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -166,11 +151,96 @@ public class Movie_details_fragment extends Fragment implements ActorRecyclerVie
             }
         });
 
-        return view;
-    }
+        btn_watch_later.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // if watchlater_list does not contain movie_id of selected movie
+                // add it to watchlater_list
+                auth = FirebaseAuth.getInstance();
+                user = auth.getCurrentUser();
+                firestoredb = FirebaseFirestore.getInstance();
+                userUid = user.getUid();
+                documentReference_user = firestoredb.collection("users").document(userUid);
 
-    public void onStart() {
-        super.onStart();
+                if(!watchlater_list.contains(movie_id)){
+                    watchlater_list.add(movie_id);
+
+                    // updating watchlater_list in firestore
+                    Map<String,Object> updatedData = new HashMap<>();
+                    updatedData.put("watchlist_array",watchlater_list);
+                    documentReference_user.set(updatedData, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // when its already in your watch later
+                                    Toast.makeText(getContext(),"Added to Watch Later",Toast.LENGTH_SHORT).show();
+                                    btn_watch_later.setText("Remove WatchLater");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                }else{
+                    watchlater_list.remove(movie_id);
+
+                    // updating watchlater_list in firestore
+                    Map<String,Object> updatedData = new HashMap<>();
+                    updatedData.put("watchlist_array",watchlater_list);
+                    documentReference_user.set(updatedData, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // when its already in your watch later
+                                    Toast.makeText(getContext(),"Remove fromWatch Later",Toast.LENGTH_SHORT).show();
+                                    btn_watch_later.setText("Add WatchLater");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                }
+            }
+        });
+
+        add_watchlist_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // if watchlater_list does not contain movie_id of selected movie
+                // add it to watchlater_list
+                auth = FirebaseAuth.getInstance();
+                user = auth.getCurrentUser();
+                firestoredb = FirebaseFirestore.getInstance();
+                userUid = user.getUid();
+                documentReference_user = firestoredb.collection("users").document(userUid);
+
+                if(!watchlater_list.contains(movie_id)){
+                    watchlater_list.add(movie_id);
+
+                    // updating watchlater_list in firestore
+                    Map<String,Object> updatedData = new HashMap<>();
+                    updatedData.put("watchlist_array",watchlater_list);
+                    documentReference_user.set(updatedData, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // when its already in your watch later
+                                    Toast.makeText(getContext(),"Added to Watch Later",Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                }else{
+                }
+            }
+        });
+
 
     }
 
