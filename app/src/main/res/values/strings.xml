@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieSpace App</string>
+    <string name="app_name">FilmSpace</string>
 
     <!-- activty_register strings -->
     <string name="register_title">Register</string>
@@ -39,4 +39,10 @@
 
     <!-- Genre page strings -->
     <string name="done">done</string>
+
+    <!-- Notification strings -->
+    <string name="channel_name">testnotifs</string>
+    <string name="channel_description">Channel for sending test notifications</string>
+    <string name="testNotificationTitle">It works!! </string>
+    <string name="testNotificationContent">Yay!! You are receiving notifications from FilmSpace!</string>
 </resources>

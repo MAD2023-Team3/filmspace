@@ -1,9 +1,14 @@
 package sg.edu.np.mad.moviespaceapp;
 
+import android.app.Application;
+import android.app.Notification;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +56,7 @@ public class Profilefragment extends Fragment implements Friend_RecyclerView_Int
     Button edit_profile_btn;
     ImageView default_profile_picture;
     View friend_request_button;
+    Button test_notifications;
     RecyclerView friends_recyclerView;
     List<UserModelClass> Friends_list = new ArrayList<>();
     Friend_RecyclerView_Adaptor adaptor;
@@ -90,12 +96,14 @@ public class Profilefragment extends Fragment implements Friend_RecyclerView_Int
                 getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
             }
         });
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
         // firestore database
         user = FirebaseAuth.getInstance().getCurrentUser();
         firestoredb = FirebaseFirestore.getInstance();
@@ -184,4 +192,13 @@ public class Profilefragment extends Fragment implements Friend_RecyclerView_Int
         // fragment transaction
         getFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
     }
+
+//    public void testNotifications(View v) {
+//        Context context = getActivity();
+//        Notification notification = new NotificationCompat.Builder(context.this, "testChannel")
+//                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                .setContentTitle(getString(R.string.testNotificationTitle))
+//                .setContentText(getString(R.string.testNotificationContent))
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//    }
 }

@@ -3,6 +3,7 @@ package sg.edu.np.mad.moviespaceapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -10,7 +11,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,7 +63,24 @@ public class MainActivity extends AppCompatActivity{
     LinearLayout btn_findFriends,btn_profile,btn_home,btn_logout,btn_watch_later,btn_leaderboard,btn_popular_actors;
     LinearLayout btn_upcoming,btn_popular_movies,btn_now_playing,btn_top_rated;
     TextView profile_username,profile_uid,nav_fame;
+    private NotificationManagerCompat notificationManager;
     //
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("testChannel", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system. You can't change the importance
+            // or other notification behaviors after this.
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
     // methods involved in the nav_drawer
     public static void openDrawer(@NonNull DrawerLayout drawerLayout){
@@ -96,6 +117,8 @@ public class MainActivity extends AppCompatActivity{
         userUid = user.getUid();
         documentReference_user = firestoredb.collection("users").document(userUid);
         FirebaseUser currentUser = auth.getCurrentUser();
+
+        notificationManager = NotificationManagerCompat.from(this);
 
         // reading the documentReference_user db
         documentReference_user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

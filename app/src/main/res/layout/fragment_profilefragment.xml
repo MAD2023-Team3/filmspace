@@ -172,14 +172,15 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/btn_friends"
+                            android:id="@+id/btn_notifs"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="0.333"
                             android:background="@drawable/grey_background"
                             android:elevation="5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:onClick="testNotifications">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="60dp"
